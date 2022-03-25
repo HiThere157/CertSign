@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\CertificateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +20,12 @@ Route::get('/', function () {
     return view('pages.home');
 });
 
-Route::get('/login', [SessionController::class, 'index']);
+Route::get('/login', [SessionController::class, 'index'])->name('login');
 Route::post('/login', [SessionController::class, 'login']);
 Route::get('/logout', [SessionController::class, 'logout']);
 
 Route::get('/register', [RegistrationController::class, 'index']);
 Route::post('/register', [RegistrationController::class, 'register']);
+
+Route::get('/root-ca', [CertificateController::class, 'rootCa_index'])->middleware('auth');
+Route::get('/certificates', [CertificateController::class, 'certificates_index'])->middleware('auth');
