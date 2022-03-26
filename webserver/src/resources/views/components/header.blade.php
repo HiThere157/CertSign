@@ -11,10 +11,7 @@
                     <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="/">Overview</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('root-ca') ? 'active' : '' }}" href="/root-ca">Root CA</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('certificates') ? 'active' : '' }}" href="/certificates">Certificates</a>
+                    <a class="nav-link {{ Request::is('certificates') ? 'active' : '' }}" href="certificates">Certificates</a>
                 </li>
 
             </ul>
