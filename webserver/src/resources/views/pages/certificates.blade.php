@@ -34,7 +34,7 @@
                     <td>{{ $root_certificate->user->username }}</td>
                     <td>{{ $root_certificate->valid_from }}</td>
                     <td>{{ $root_certificate->valid_to }} ({{ $root_certificate->daysValid() }} days)</td>
-                    <td>{{ $root_certificate->serial_number }}</td>
+                    <td>{{ dechex($root_certificate->serial_number) }}</td>
                     <td>
                         <a href="#" class="btn btn-primary">View</a>
                     </td>
@@ -80,7 +80,7 @@
                     <td>{{ $certificate->issuer->name }}</td>
                     <td>{{ $certificate->valid_from }}</td>
                     <td>{{ $certificate->valid_to }} ({{ $certificate->daysValid() }} days)</td>
-                    <td>{{ $certificate->serial_number }}</td>
+                    <td>{{ dechex($certificate->serial_number) }}</td>
                     <td>
                         <a href="#" class="btn btn-primary">View</a>
                         <a href="#" class="btn btn-danger">Delete</a>
@@ -106,6 +106,7 @@
                 if(selfSigned) { issuerInput.val(""); }
 
                 $('#addCertificateModal').find('[name="valid_from"]').val(new Date().toISOString().substring(0, 10));
+                $('#addCertificateModal').find('[name="valid_to"]').val(new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000).toISOString().substring(0, 10));
             }
 
             $('[data-bs-toggle="modal"]').click(function() {

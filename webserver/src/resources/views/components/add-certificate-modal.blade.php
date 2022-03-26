@@ -16,8 +16,13 @@
                             <input type="text" class="form-control" id="name" name="name" spellcheck="false" />
                         </div>
                         <div class="flex-grow-1">
-                            <label for="valid_to" class="col-form-label">Created by:</label>
-                            <input type="text" class="form-control" id="valid_to" value="{{ Auth::user()->username }}" disabled />
+                            <label for="created_by" class="col-form-label">Created by:</label>
+                            @auth
+                                <input type="text" class="form-control" id="created_by" value="{{ Auth::user()->username }}" disabled />
+                            @endauth
+                            @guest
+                                <input type="text" class="form-control" id="created_by" value="" disabled />
+                            @endguest
                         </div>
                     </div>
 
