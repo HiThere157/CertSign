@@ -33,4 +33,9 @@ class Certificate extends Model
     {
         return $this->belongsTo(Certificate::class, 'issuer_id');
     }
+
+    public function encryptionKey()
+    {
+        return $this->hasOne(EncryptionKey::class, 'certificate_id', 'id');
+    }
 }

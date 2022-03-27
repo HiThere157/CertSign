@@ -104,6 +104,17 @@
     <x-change-owner-modal />
 
     <script>
+        //https://stackoverflow.com/a/64908345
+        function download(content, filename){
+            var a = document.createElement('a')
+            var blob = new Blob([content], {'type': 'text/plain'})
+            var url = URL.createObjectURL(blob)
+
+            a.setAttribute('href', url)
+            a.setAttribute('download', filename)
+            a.click()
+        }
+
         function addRemoveSanBtn (element) {
             $(element).parent().remove();
         }
@@ -158,8 +169,7 @@
             var response = await fetch("{{ route('certificate.view', ':id')}}".replace(':id', id));
             var certificateInfo = await response.json();
 
-            console.log(certificateInfo)
-            $('#viewCertificateModalLabel').text(certificateInfo.certificate.self_signed ? 'View Root Certificate' : 'View Certificate');
+            $('#viewCertificateModalLabel').text((certificateInfo.certificate.self_signed ? 'View Root Certificate' : 'View Certificate') + " (Id: " + certificateInfo.certificate.id + ")");
             $('#viewName').val(certificateInfo.certificate.name);
             $('#viewCreated_by').val(certificateInfo.decoded.subject.OU);
             $('#viewValid_from').val(certificateInfo.certificate.valid_from);
@@ -197,22 +207,6 @@
                 updateAddModal.call(this, true);
             });
 
-            //clear all input fields before opening, and set all values
-            $('[name="viewModalBtn"]').click(function() {
-                updateViewModal($(this).attr('data-bs-viewId'));
-            });
-
-            //set form action to correct route
-            $('[name="changeOwnerModalBtn"]').click(function() {
-                $('#changeOwnerForm').prop('action', "{{ route('certificate.changeOwner', ':id')}}".replace(':id', $(this).attr('data-bs-changeId')));
-            });
-
-            //set confirm button to correct route
-            $('[name="deleteModalBtn"]').click(function() {
-                $('#deleteCertificateBtn').prop('href', "{{ route('certificate.delete', ':id')}}".replace(':id', $(this).attr('data-bs-deleteId')));
-            });
-
-
             //add Certificate self signed checkbox listener
             $('#addCertificateModal').find('[name="self_signed"]').change(function() {
                 updateAddModal.call(this, false);
@@ -232,6 +226,53 @@
                     );
                     sanInput.val('');
                 }
+            });
+
+            // add valid_to increment buttons listener
+            function getCurrentValidTo() {
+                return new Date($('#addValid_to').val());
+            }
+            // 1 day
+            $('#addIncrement0').click(function() {
+                var validToDate = getCurrentValidTo();
+                validToDate.setDate(validToDate.getDate() + 1);
+                $('#addValid_to').val(validToDate.toISOString().substring(0, 10));
+            });
+            // 1 month
+            $('#addIncrement1').click(function() {
+                var validToDate = getCurrentValidTo();
+                validToDate.setMonth(validToDate.getMonth() + 1);
+                $('#addValid_to').val(validToDate.toISOString().substring(0, 10));
+            });
+            // 1 year
+            $('#addIncrement2').click(function() {
+                var validToDate = getCurrentValidTo();
+                validToDate.setFullYear(validToDate.getFullYear() + 1);
+                $('#addValid_to').val(validToDate.toISOString().substring(0, 10));
+            });
+            
+            //clear all input fields before opening, and set all values
+            $('[name="viewModalBtn"]').click(function() {
+                updateViewModal($(this).attr('data-bs-viewId'));
+            });
+
+            //listener for download button
+            $('#viewDownloadFiles').click(function() {
+                var certificate = $('#viewFileCertificate').find('textarea').val();
+                var key = $('#viewFileKey').find('textarea').val();
+
+                download(certificate, 'certificate.cer');
+                download(key, 'private_key.key');
+            });
+
+            //set form action to correct route
+            $('[name="changeOwnerModalBtn"]').click(function() {
+                $('#changeOwnerForm').prop('action', "{{ route('certificate.changeOwner', ':id')}}".replace(':id', $(this).attr('data-bs-changeId')));
+            });
+
+            //set confirm button to correct route
+            $('[name="deleteModalBtn"]').click(function() {
+                $('#deleteCertificateBtn').prop('href', "{{ route('certificate.delete', ':id')}}".replace(':id', $(this).attr('data-bs-deleteId')));
             });
         });
     </script>

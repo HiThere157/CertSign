@@ -33,7 +33,13 @@
                         </div>
                         <div class="flex-grow-1">
                             <label for="addValid_to" class="col-form-label">Valid To:</label>
-                            <input type="date" class="form-control" id="addValid_to" name="valid_to" />
+                            <div class="input-group mb-3">
+                                <input type="date" class="form-control" id="addValid_to" name="valid_to" />
+                                <button class="btn btn-outline-secondary" type="button" id="addIncrement0">+1 Day</button>
+                                <button class="btn btn-outline-secondary" type="button" id="addIncrement1">+1 Month</button>
+                                <button class="btn btn-outline-secondary" type="button" id="addIncrement2">+1 Year</button>
+                            </div>
+
                         </div>
                     </div>
 

@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Crypt;
 use App\Models\Certificate;
+use App\Models\EncryptionKey;
 
 class CertificateController extends Controller
 {
@@ -59,7 +62,7 @@ class CertificateController extends Controller
 
             $certificate->delete();
         }
-        
+
         return redirect()->route('certificates');
     }
 
@@ -127,6 +130,16 @@ class CertificateController extends Controller
         return $newSerial;
     }
 
+    private function generateNewEncryptionKey()
+    {
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randstring = '';
+        for ($i = 0; $i < 20; $i++) {
+            $randstring .= $characters[rand(0, strlen($characters)-1)];
+        }
+        return $randstring;
+    }
+
     private function generateNewCertificate(Certificate $certificate, $subjectAltNames){
         $storagePath = 'certificates/' . dechex($certificate->serial_number);
         $confPath = storage_path('app/' . $storagePath . '/openssl.cnf');
@@ -153,7 +166,7 @@ class CertificateController extends Controller
         if(!$certificate->self_signed) {
             $issuerStoragePath = 'certificates/' . dechex(Certificate::find($certificate->issuer_id)->serial_number);
             $issuerCertificate = Storage::disk('local')->get($issuerStoragePath . '/cert.cer');
-            $issuerPrivateKey = openssl_pkey_get_private(Storage::disk('local')->get($issuerStoragePath . '/cert.key'), 'mypassword');
+            $issuerPrivateKey = openssl_pkey_get_private(Storage::disk('local')->get($issuerStoragePath . '/cert.key'), Crypt::decryptString(Certificate::find($certificate->issuer_id)->encryptionKey->key));
         }
 
         $x509 = openssl_csr_sign(
@@ -169,12 +182,19 @@ class CertificateController extends Controller
             $certificate->serial_number
         );
 
-        openssl_pkey_export($privateKey, $privateKeyOut, 'mypassword', ['config' => $confPath]);
+        $encryptionKey = $this->generateNewEncryptionKey();
+
+        openssl_pkey_export($privateKey, $privateKeyOut, $encryptionKey, ['config' => $confPath]);
         openssl_csr_export($csr, $csrOut);
         openssl_x509_export($x509, $certOut);
 
         Storage::disk('local')->put($storagePath . '/cert.key', $privateKeyOut);
         Storage::disk('local')->put($storagePath . '/cert.csr', $csrOut);
         Storage::disk('local')->put($storagePath . '/cert.cer', $certOut);
+
+        $key = new EncryptionKey();
+        $key->certificate_id = $certificate->id;
+        $key->key = Crypt::encryptString($encryptionKey);
+        $key->save();
     }
 }
