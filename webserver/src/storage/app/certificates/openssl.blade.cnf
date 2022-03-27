@@ -1,0 +1,20 @@
+[ req ]
+distinguished_name = req_distinguished_name
+@if(count($subjects) > 0)
+req_extensions = v3_req
+@endif
+
+[ req_distinguished_name ]
+commonName = "{{ $commonName }}"
+organizationalUnitName = "{{ $created_by }}"
+basicConstraints = CA:{{ $ca }}
+
+[ v3_req ]
+@if(count($subjects) > 0)
+subjectAltName = @san
+@endif
+
+[san]
+@foreach($subjects as $subject)
+DNS.{{ $loop->index+1 }} = {{ $subject }}
+@endforeach
