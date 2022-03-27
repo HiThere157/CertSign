@@ -4,17 +4,16 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class addCertificateModal extends Component
+class viewCertificateModal extends Component
 {
-    public $root_certificates;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($rootCertificates)
+    public function __construct()
     {
-        $this->root_certificates = $rootCertificates;
+        //
     }
 
     /**
@@ -24,6 +23,6 @@ class addCertificateModal extends Component
      */
     public function render()
     {
-        return view('components.add-certificate-modal');
+        return view('components.view-certificate-modal');
     }
 }

@@ -3,18 +3,19 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use App\Models\User;
 
-class addCertificateModal extends Component
+class changeOwnerModal extends Component
 {
-    public $root_certificates;
+    public $all_users;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($rootCertificates)
+    public function __construct()
     {
-        $this->root_certificates = $rootCertificates;
+        $this->all_users = User::all();
     }
 
     /**
@@ -24,6 +25,6 @@ class addCertificateModal extends Component
      */
     public function render()
     {
-        return view('components.add-certificate-modal');
+        return view('components.change-owner-modal');
     }
 }

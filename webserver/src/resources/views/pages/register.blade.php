@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-    <form class="rounded shadow m-auto w-25 p-4 mt-5" style="min-width: 460px;" action="register" method="post">
+    <form class="rounded shadow m-auto w-25 p-4 mt-5" style="min-width: 460px;" action="{{ route('register') }}" method="post">
         @csrf
 
         <div class="form-outline mb-4">
@@ -27,7 +27,7 @@
         <button type="submit" class="btn btn-primary btn-block mb-4 w-100">Register</button>
 
         <div class="text-center">
-            <p>Login instead? <a href="login">Login</a></p>
+            <p>Login instead? <a href="{{ route('login') }}">Login</a></p>
         </div>
     </form>
 @stop

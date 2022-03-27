@@ -18,15 +18,17 @@ use App\Http\Controllers\CertificateController;
 
 Route::get('/', function () {
     return view('pages.home');
-});
+})->name('home');
 
 Route::get('/login', [SessionController::class, 'index'])->name('login');
 Route::post('/login', [SessionController::class, 'login']);
-Route::get('/logout', [SessionController::class, 'logout']);
+Route::get('/logout', [SessionController::class, 'logout'])->name('logout');
 
-Route::get('/register', [RegistrationController::class, 'index']);
+Route::get('/register', [RegistrationController::class, 'index'])->name('register');
 Route::post('/register', [RegistrationController::class, 'register']);
 
-Route::get('/certificates', [CertificateController::class, 'certificates_index']);
-Route::post('/certificates/add', [CertificateController::class, 'certificates_add'])->middleware('auth');
-Route::get('/certificates/delete/{id}', [CertificateController::class, 'certificates_delete'])->middleware('auth');
+Route::get('/certificates', [CertificateController::class, 'certificates_index'])->middleware('auth')->name('certificates');
+Route::post('/certificate/add', [CertificateController::class, 'certificate_add'])->middleware('auth')->name('certificate.add');
+Route::get('/certificate/delete/{id}', [CertificateController::class, 'certificate_delete'])->middleware('auth')->name('certificate.delete');
+Route::get('/certificate/view/{id}', [CertificateController::class, 'certificate_view'])->middleware('auth')->name('certificate.view');
+Route::post('certificate/changeOwner/{id}', [CertificateController::class, 'certificate_changeOwner'])->middleware('auth')->name('certificate.changeOwner');

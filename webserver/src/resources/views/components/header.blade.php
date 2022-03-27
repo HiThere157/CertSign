@@ -8,10 +8,10 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="/">Overview</a>
+                    <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ route('home') }}">Overview</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('certificates') ? 'active' : '' }}" href="certificates">Certificates</a>
+                    <a class="nav-link {{ Request::is('certificates') ? 'active' : '' }}" href="{{ route('certificates') }}">Certificates</a>
                 </li>
 
             </ul>
@@ -27,8 +27,8 @@
             @endauth
             @guest
                 <div class="text-end">
-                    <a href="register" type="button" class="btn btn-outline-light me-2">Sign-Up</a>
-                    <a href="login" type="button" class="btn btn-warning">Login</a>
+                    <a href="{{ route('register') }}" type="button" class="btn btn-outline-light me-2">Sign-Up</a>
+                    <a href="{{ route('login') }}" type="button" class="btn btn-warning">Login</a>
                 </div>
             @endguest
         </div>

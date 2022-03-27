@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
 use App\Models\Certificate;
 
 class CertificateController extends Controller
@@ -17,16 +18,74 @@ class CertificateController extends Controller
         ]);
     }
 
-    public function certificates_delete($id)
+    public function certificate_view($id)
+    {
+        $db_certificate = Certificate::find($id);
+
+        if(!$db_certificate) {
+            return ['error' => 'Certificate not found'];
+        }
+
+        $storagePath = 'certificates/' . dechex($db_certificate->serial_number);
+        $certificate = Storage::disk('local')->get($storagePath . '/cert.cer');
+        $privateKey = Storage::disk('local')->get($storagePath . '/cert.key');
+        $csr = Storage::disk('local')->get($storagePath . '/cert.csr');
+        $cnf = Storage::disk('local')->get($storagePath . '/openssl.cnf');
+        
+        $certificate_decoded = openssl_x509_parse($certificate);
+
+        return [
+            'certificate' => $db_certificate,
+            'decoded' => $certificate_decoded,
+            'issuer' => Certificate::find($db_certificate->issuer_id ?? $db_certificate->id),
+            'files' => [
+                'certificate' => $certificate,
+                'private_key' => Gate::allows('owns-cert', $db_certificate) ? $privateKey : "No Permission!\n\nContact the owner of this certificate to get the private key.",
+                'csr' => $csr,
+                'cnf' => $cnf
+            ]
+        ];
+    }
+
+    public function certificate_delete($id)
     {
         $certificate = Certificate::find($id);
         if ($certificate) {
+            if(!Gate::allows('owns-cert', $certificate)) {
+                return redirect()->route('certificates')->withErrors([
+                    'error' => 'No Permission! Contact the owner of this certificate to delete it.'
+                ]);
+            }
+
             $certificate->delete();
         }
-        return redirect('certificates');
+        
+        return redirect()->route('certificates');
     }
 
-    public function certificates_add(Request $request)
+    public function certificate_changeOwner(Request $request, $id)
+    {
+        $this->validate($request, [
+            'newOwner' => 'required'
+        ]);
+
+        $certificate = Certificate::find($id);
+        if($certificate){
+            if(!(Gate::allows('isAdmin') || Gate::allows('owns-cert', $certificate))){
+                return redirect()->route('certificates')->withErrors([
+                    'error' => 'No Permission! Only the owner of this certificate can change the owner.'
+                ]);
+            }
+
+            $certificate->created_by_id_original = $certificate->created_by_id;
+            $certificate->created_by_id = $request->input('newOwner');
+            $certificate->save();
+        }
+
+        return redirect()->route('certificates');
+    }
+
+    public function certificate_add(Request $request)
     {
         $this->validate($request, [
             'name' => 'required',
@@ -34,7 +93,7 @@ class CertificateController extends Controller
         ]);
 
         if($request->input('issuer') == '' && $request->input('self_signed') != 'on') {
-            return redirect()->back()->withErrors([
+            return redirect()->route('certificates')->withErrors([
                 'issuer' => 'Issuer is required for non self-signed certificates'
             ]);
         }
@@ -49,9 +108,9 @@ class CertificateController extends Controller
         $certificate->self_signed = $request->input('self_signed') == 'on';
         $certificate->save();
 
-        $this->generateNewCertificate($certificate);
+        $this->generateNewCertificate($certificate, $request->input('san'));
 
-        return redirect('certificates');
+        return redirect()->route('certificates');
     }
 
     private function generateNewSerial()
@@ -68,14 +127,14 @@ class CertificateController extends Controller
         return $newSerial;
     }
 
-    private function generateNewCertificate(Certificate $certificate){
+    private function generateNewCertificate(Certificate $certificate, $subjectAltNames){
         $storagePath = 'certificates/' . dechex($certificate->serial_number);
         $confPath = storage_path('app/' . $storagePath . '/openssl.cnf');
 
         $configContent = Blade::render(Storage::disk('local')->get('certificates\openssl.blade.cnf'), [
             'commonName' => $certificate->name,
             'created_by' => $certificate->user->username,
-            'subjects' => ['test.com', 'test2.com'],
+            'subjects' => $subjectAltNames ?? [],
             'ca' => $certificate->self_signed ? 'TRUE' : 'FALSE',
         ]);
         Storage::disk('local')->put($storagePath . '/openssl.cnf', $configContent);

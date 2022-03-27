@@ -3,7 +3,7 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mx-5">
         <h1>Root Certificates</h1>
-        <button type="button" class="btn btn-primary" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addCertificateModal" data-bs-selfSigned="true">Add Root Certificate</button>
+        <button type="button" name="addModalBtn" class="btn btn-primary" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addCertificateModal" data-bs-selfSigned="true">Add Root Certificate</button>
     </div>
     <table class="table table-striped table-hover">
         <thead>
@@ -14,7 +14,7 @@
                 <th>Valid From</th>
                 <th>Valid To (Days remaining)</th>
                 <th>Serial Number</th>
-                <th style="width: 10rem;">Actions</th>
+                <th style="width: 17rem;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -34,9 +34,13 @@
                     <td>{{ $root_certificate->user->username }}</td>
                     <td>{{ $root_certificate->valid_from }}</td>
                     <td>{{ $root_certificate->valid_to }} ({{ $root_certificate->daysValid() }} days)</td>
-                    <td>{{ dechex($root_certificate->serial_number) }}</td>
+                    <td>0{{ dechex($root_certificate->serial_number) }}</td>
                     <td>
-                        <a href="#" class="btn btn-primary">View</a>
+                        @can('owns-cert', $root_certificate)
+                            <!-- only show transfer, if current user has permission -->
+                            <button name="changeOwnerModalBtn" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changeOwnerModal" data-bs-changeId="{{ $root_certificate->id }}">Transfer</button>
+                        @endcan
+                        <button name="viewModalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewCertificateModal" data-bs-viewId="{{ $root_certificate->id }}">View</button>
                     </td>
                 </tr>
             @endforeach
@@ -47,7 +51,7 @@
 
     <div class="d-flex justify-content-between align-items-center mx-5">
         <h1>Certificates</h1>
-        <button type="button" class="btn btn-primary" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addCertificateModal" data-bs-selfSigned="false">Add Certificate</button>
+        <button type="button" name="addModalBtn" class="btn btn-primary" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addCertificateModal" data-bs-selfSigned="false">Add Certificate</button>
     </div>
     <table class="table table-striped table-hover">
         <thead>
@@ -59,7 +63,7 @@
                 <th>Valid From</th>
                 <th>Valid To (Days remaining)</th>
                 <th>Serial Number</th>
-                <th style="width: 10rem;">Actions</th>
+                <th style="width: 17rem;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -77,47 +81,158 @@
                         </span>
                     </td>
                     <td>{{ $certificate->user->username }}</td>
-                    <td>[{{ dechex($certificate->issuer->serial_number) }}] {{ $certificate->issuer->name }}</td>
+                    <td>[0{{ dechex($certificate->issuer->serial_number) }}] {{ $certificate->issuer->name }}</td>
                     <td>{{ $certificate->valid_from }}</td>
                     <td>{{ $certificate->valid_to }} ({{ $certificate->daysValid() }} days)</td>
-                    <td>{{ dechex($certificate->serial_number) }}</td>
+                    <td>0{{ dechex($certificate->serial_number) }}</td>
                     <td>
-                        <a href="#" class="btn btn-primary">View</a>
-                        <a href="certificates/delete/{{ $certificate->id }}" class="btn btn-danger">Delete</a>
+                        @can('owns-cert', $certificate)
+                            <!-- only show transfer and delete, if current user has permission -->
+                            <button name="changeOwnerModalBtn" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changeOwnerModal" data-bs-changeId="{{ $certificate->id }}">Transfer</button>
+                            <button name="deleteModalBtn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCertificateModal" data-bs-deleteId="{{ $certificate->id }}">Delete</button>
+                        @endcan
+                        <button name="viewModalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewCertificateModal" data-bs-viewId="{{ $certificate->id }}">View</button>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-    <x-add-certificate-modal />
+    <x-add-certificate-modal :rootCertificates="$root_certificates" />
+    <x-view-certificate-modal />
+    <x-delete-certificate-modal />
+    <x-change-owner-modal />
 
     <script>
-        $(document).ready(function() {
-            function updateModal (modalOpening){
-                //if modal is opened, override current checkbox attribute
-                var selfSigned = modalOpening ? $(this).attr('data-bs-selfSigned') == "true" : $(this).prop('checked');
+        function addRemoveSanBtn (element) {
+            $(element).parent().remove();
+        }
 
-                var issuerInput = $('#addCertificateModal').find('#issuer');
-                issuerInput.prop('disabled', selfSigned);
-                $('#addCertificateModal').find('[name="self_signed"]').prop('checked', selfSigned);
-                $('#CertificateModalLabel').text(selfSigned ? "Add Root Certificate" : "Add Certificate");
+        function updateAddModal (modalOpening){
+            //if modal is opened, override current checkbox attribute
+            var selfSigned = modalOpening ? $(this).attr('data-bs-selfSigned') == 'true' : $(this).prop('checked');
 
-                if(selfSigned) { issuerInput.val(""); }
+            var issuerInput = $('#addIssuer');
+            var sanInput = $('#addSanInput');
+            issuerInput.prop('disabled', selfSigned);
+            sanInput.prop('disabled', selfSigned);
 
-                $('#addCertificateModal').find('[id="valid_from"]').val(new Date().toISOString().substring(0, 10));
-                $('#addCertificateModal').find('[name="valid_to"]').val(new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000).toISOString().substring(0, 10));
+            if(selfSigned) { 
+                issuerInput.val(''); 
+                sanInput.val(''); 
+
+                $('#addSanList').find('div').remove();
             }
 
-            $('[data-bs-toggle="modal"]').click(function() {
-                updateModal.call(this, true);
+            $('#addSelf_signed').prop('checked', selfSigned);
+            $('#addCertificateModalLabel').text(selfSigned ? 'Add Root Certificate' : 'Add Certificate');
+
+            //set default values of valid_from and valid_to
+            $('#addValid_from').val(new Date().toISOString().substring(0, 10));
+            $('#addValid_to').val(new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000).toISOString().substring(0, 10));
+        }
+
+        async function updateViewModal (id){
+            $('#viewName').val('');
+            $('#viewCreated_by').val('');
+            $('#viewValid_from').val('');
+            $('#viewValid_to').val('');
+
+            $('#viewSN').val('');
+            $('#viewHash').val('');
+            $('#viewSigType').val('');
+
+            $('#viewSanList').find('input').remove();
+            $('#viewSubjectList').find('input').remove();
+
+            $('#viewIssuer').val('');
+            $('#viewIssuerSN').val('');
+
+            $('#viewIssuerCertificate').unbind();
+
+            $('#viewFileCertificate').find('textarea').remove();
+            $('#viewFileKey').find('textarea').remove();
+            $('#viewFileCsr').find('textarea').remove();
+            $('#viewFileConfig').find('textarea').remove();
+
+            var response = await fetch("{{ route('certificate.view', ':id')}}".replace(':id', id));
+            var certificateInfo = await response.json();
+
+            console.log(certificateInfo)
+            $('#viewCertificateModalLabel').text(certificateInfo.certificate.self_signed ? 'View Root Certificate' : 'View Certificate');
+            $('#viewName').val(certificateInfo.certificate.name);
+            $('#viewCreated_by').val(certificateInfo.decoded.subject.OU);
+            $('#viewValid_from').val(certificateInfo.certificate.valid_from);
+            $('#viewValid_to').val(certificateInfo.certificate.valid_to);
+
+            $('#viewSN').val('0' + Number(certificateInfo.certificate.serial_number).toString(16));
+            $('#viewHash').val(certificateInfo.decoded.hash);
+            $('#viewSigType').val(certificateInfo.decoded.signatureTypeSN);
+
+            certificateInfo.decoded.extensions.subjectAltName?.split(', ').forEach(san => {
+                $('#viewSanList').append('<input type="text" class="form-control mb-2" value="' + san.replace(':', ': ') + '" readonly >');
             });
 
+            Object.entries(certificateInfo.decoded.subject).forEach(subject => {
+                $('#viewSubjectList').append('<input type="text" class="form-control mb-2" value="' + subject.join(': ') + '" readonly >');
+            });
+
+            $('#viewIssuer').val(certificateInfo.issuer.name);
+            $('#viewIssuerSN').val('0' + Number(certificateInfo.issuer.serial_number).toString(16));
+
+            $('#viewIssuerCertificate').click(function() {
+                updateViewModal(certificateInfo.issuer.id);
+            });
+
+            var textareaHTML = '<textarea class="form-control w-75 mx-auto mt-2" onclick="this.focus();this.select()" style="height: 20rem" readonly></textarea>';
+            $(textareaHTML).text(certificateInfo.files.certificate).appendTo('#viewFileCertificate');
+            $(textareaHTML).text(certificateInfo.files.private_key).appendTo('#viewFileKey');
+            $(textareaHTML).text(certificateInfo.files.csr).appendTo('#viewFileCsr');
+            $(textareaHTML).text(certificateInfo.files.cnf).appendTo('#viewFileConfig');
+        }
+
+        $(document).ready(function() {
+            //set default values of valid_from and valid_to, and disable issuer input if self-signed
+            $('[name="addModalBtn"]').click(function() {
+                updateAddModal.call(this, true);
+            });
+
+            //clear all input fields before opening, and set all values
+            $('[name="viewModalBtn"]').click(function() {
+                updateViewModal($(this).attr('data-bs-viewId'));
+            });
+
+            //set form action to correct route
+            $('[name="changeOwnerModalBtn"]').click(function() {
+                $('#changeOwnerForm').prop('action', "{{ route('certificate.changeOwner', ':id')}}".replace(':id', $(this).attr('data-bs-changeId')));
+            });
+
+            //set confirm button to correct route
+            $('[name="deleteModalBtn"]').click(function() {
+                $('#deleteCertificateBtn').prop('href', "{{ route('certificate.delete', ':id')}}".replace(':id', $(this).attr('data-bs-deleteId')));
+            });
+
+
+            //add Certificate self signed checkbox listener
             $('#addCertificateModal').find('[name="self_signed"]').change(function() {
-                updateModal.call(this, false);
+                updateAddModal.call(this, false);
+            });
+
+            //add new SAN input listener
+            $('#addSanBtn').click(function() {
+                var sanInput = $('#addSanInput');
+                var sanInputValue = sanInput.val();
+
+                if(sanInputValue != '') {
+                    $('#addSanList').append(
+                        '<div class="input-group mb-2">' + 
+                            '<input type="text" class="form-control" name="san[]" value="' + sanInputValue + '" readonly >' +
+                            '<button class="btn btn-outline-danger" type="button" onclick="addRemoveSanBtn(this)">Remove</button>' +
+                        '</div>'
+                    );
+                    sanInput.val('');
+                }
             });
         });
-
     </script>
-
 @stop
