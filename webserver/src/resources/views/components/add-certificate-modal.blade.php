@@ -29,7 +29,7 @@
                     <div class="d-flex flex-wrap mb-3" style="column-gap: 1rem;">
                         <div class="flex-grow-1">
                             <label for="valid_from" class="col-form-label">Valid From:</label>
-                            <input type="date" class="form-control" id="valid_from" name="valid_from" />
+                            <input type="date" class="form-control" id="valid_from" disabled />
                         </div>
                         <div class="flex-grow-1">
                             <label for="valid_to" class="col-form-label">Valid To:</label>
@@ -43,7 +43,7 @@
                             <select class="form-select" id="issuer" name="issuer">
                                 <option value="">Select an issuer</option>
                                 @foreach($root_certificates as $root_certificate)
-                                    <option value="{{ $root_certificate->id }}">{{ $root_certificate->name }}</option>
+                                    <option value="{{ $root_certificate->id }}">[{{ dechex($root_certificate->serial_number) }}] {{ $root_certificate->name }}</option>
                                 @endforeach
                             </select>
                             <div class="form-check">

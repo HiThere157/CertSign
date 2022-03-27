@@ -29,3 +29,4 @@ Route::post('/register', [RegistrationController::class, 'register']);
 
 Route::get('/certificates', [CertificateController::class, 'certificates_index']);
 Route::post('/certificates/add', [CertificateController::class, 'certificates_add'])->middleware('auth');
+Route::get('/certificates/delete/{id}', [CertificateController::class, 'certificates_delete'])->middleware('auth');
