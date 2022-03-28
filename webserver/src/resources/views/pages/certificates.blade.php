@@ -39,7 +39,8 @@
                         @can('owns-cert', $root_certificate)
                             <!-- only show transfer, if current user has permission -->
                             <button name="changeOwnerModalBtn" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changeOwnerModal" data-bs-changeId="{{ $root_certificate->id }}">Transfer</button>
-                        @endcan
+                            <button name="deleteModalBtn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCertificateModal" data-bs-deleteId="{{ $root_certificate->id }}">Delete</button>
+                            @endcan
                         <button name="viewModalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewCertificateModal" data-bs-viewId="{{ $root_certificate->id }}">View</button>
                     </td>
                 </tr>
@@ -121,7 +122,7 @@
 
         function updateAddModal (modalOpening){
             //if modal is opened, override current checkbox attribute
-            var selfSigned = modalOpening ? $(this).attr('data-bs-selfSigned') == 'true' : $(this).prop('checked');
+            var selfSigned = modalOpening ? $(this).attr('data-bs-selfSigned') === 'true' : $(this).prop('checked');
 
             var issuerInput = $('#addIssuer');
             var sanInput = $('#addSanInput');
@@ -166,6 +167,8 @@
             $('#viewFileCsr').find('textarea').remove();
             $('#viewFileConfig').find('textarea').remove();
 
+            $('#viewEncryptionKey').prop('href', '');
+
             var response = await fetch("{{ route('certificate.view', ':id')}}".replace(':id', id));
             var certificateInfo = await response.json();
 
@@ -199,6 +202,8 @@
             $(textareaHTML).text(certificateInfo.files.private_key).appendTo('#viewFileKey');
             $(textareaHTML).text(certificateInfo.files.csr).appendTo('#viewFileCsr');
             $(textareaHTML).text(certificateInfo.files.cnf).appendTo('#viewFileConfig');
+
+            $('#viewEncryptionKey').prop('href', "{{ route('encryptionkey.view', ':id')}}".replace(':id', id));
         }
 
         $(document).ready(function() {

@@ -89,7 +89,7 @@
                             <span class="d-block mt-2">Download Certificate and Encrypted Private Key:</span>
                             <div class="d-flex">
                                 <button class="btn btn-primary me-1" id="viewDownloadFiles">Download</button>
-                                <a class="btn btn-warning ms-1">Show Encryption Password</a>
+                                <a href="" id="viewEncryptionKey" class="btn btn-warning ms-1">Show Encryption Password</a>
                             </div>
                         </div>
                     </div>

@@ -13,7 +13,7 @@ use App\Models\EncryptionKey;
 
 class CertificateController extends Controller
 {
-    public function certificates_index()
+    public function index()
     {
         return view('pages.certificates', [
             'root_certificates' => Certificate::all()->where('self_signed', true),
@@ -21,7 +21,7 @@ class CertificateController extends Controller
         ]);
     }
 
-    public function certificate_view($id)
+    public function view($id)
     {
         $db_certificate = Certificate::find($id);
 
@@ -50,7 +50,7 @@ class CertificateController extends Controller
         ];
     }
 
-    public function certificate_delete($id)
+    public function delete($id)
     {
         $certificate = Certificate::find($id);
         if ($certificate) {
@@ -60,13 +60,14 @@ class CertificateController extends Controller
                 ]);
             }
 
+            $certificate->encryptionKey->delete();
             $certificate->delete();
         }
 
         return redirect()->route('certificates');
     }
 
-    public function certificate_changeOwner(Request $request, $id)
+    public function changeOwner(Request $request, $id)
     {
         $this->validate($request, [
             'newOwner' => 'required'
@@ -88,7 +89,7 @@ class CertificateController extends Controller
         return redirect()->route('certificates');
     }
 
-    public function certificate_add(Request $request)
+    public function add(Request $request)
     {
         $this->validate($request, [
             'name' => 'required',
@@ -140,7 +141,8 @@ class CertificateController extends Controller
         return $randstring;
     }
 
-    private function generateNewCertificate(Certificate $certificate, $subjectAltNames){
+    private function generateNewCertificate(Certificate $certificate, $subjectAltNames)
+    {
         $storagePath = 'certificates/' . dechex($certificate->serial_number);
         $confPath = storage_path('app/' . $storagePath . '/openssl.cnf');
 

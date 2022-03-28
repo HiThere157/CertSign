@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('encryption_keys', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->integer('certificate_id')->unique();
             $table->string('key');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

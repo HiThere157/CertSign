@@ -22,7 +22,7 @@
                     </span>
 
                     <a type="button" class="btn btn-outline-light me-2">Settings</a>
-                    <a href="logout" type="button" class="btn btn-warning">Logout</a>
+                    <a href="{{ route('logout') }}" type="button" class="btn btn-warning">Logout</a>
                 </div>
             @endauth
             @guest

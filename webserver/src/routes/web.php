@@ -3,7 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\ReauthController;
+
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\EncryptionKeyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +30,13 @@ Route::get('/logout', [SessionController::class, 'logout'])->name('logout');
 Route::get('/register', [RegistrationController::class, 'index'])->name('register');
 Route::post('/register', [RegistrationController::class, 'register']);
 
-Route::get('/certificates', [CertificateController::class, 'certificates_index'])->middleware('auth')->name('certificates');
-Route::post('/certificate/add', [CertificateController::class, 'certificate_add'])->middleware('auth')->name('certificate.add');
-Route::get('/certificate/delete/{id}', [CertificateController::class, 'certificate_delete'])->middleware('auth')->name('certificate.delete');
-Route::get('/certificate/view/{id}', [CertificateController::class, 'certificate_view'])->middleware('auth')->name('certificate.view');
-Route::post('certificate/changeOwner/{id}', [CertificateController::class, 'certificate_changeOwner'])->middleware('auth')->name('certificate.changeOwner');
+Route::get('/confirm-password', [ReauthController::class, 'index'])->middleware('auth')->name('password.confirm');
+Route::post('/confirm-password', [ReauthController::class, 'reauth'])->middleware(['auth', 'throttle:6,1']);
+
+Route::get('/certificates', [CertificateController::class, 'index'])->middleware('auth')->name('certificates');
+Route::post('/certificate/add', [CertificateController::class, 'add'])->middleware('auth')->name('certificate.add');
+Route::get('/certificate/delete/{id}', [CertificateController::class, 'delete'])->middleware('auth')->name('certificate.delete');
+Route::get('/certificate/view/{id}', [CertificateController::class, 'view'])->middleware('auth')->name('certificate.view');
+Route::post('certificate/changeOwner/{id}', [CertificateController::class, 'changeOwner'])->middleware('auth')->name('certificate.changeOwner');
+
+Route::get('/encryptionkey/view/{id}', [EncryptionKeyController::class, 'view'])->middleware(['password.confirm'])->name('encryptionkey.view');

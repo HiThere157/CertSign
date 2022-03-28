@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('name');
             $table->integer('created_by_id');
             $table->integer('created_by_id_original')->nullable();
@@ -24,6 +23,8 @@ return new class extends Migration
             $table->string('issuer_id')->nullable();
             $table->string('serial_number')->unique();
             $table->boolean('self_signed');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
