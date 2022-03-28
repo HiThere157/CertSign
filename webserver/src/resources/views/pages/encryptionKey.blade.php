@@ -17,10 +17,18 @@
 
     <script>
         $(document).ready(function() {
+            var copyReset;
+            var visibilityReset;
+
             $('#toggleVisibilityBtn').click(function() {
                 var encryptionKey = $('#toggleVisibilityBtn').prev();
                 if(encryptionKey.prop('type') === 'password') {
                     encryptionKey.attr('type', 'text');
+
+                    clearTimeout(visibilityReset);
+                    visibilityReset = setTimeout(function() {
+                        encryptionKey.attr('type', 'password');
+                    }, 10000);
                 } else {
                     encryptionKey.attr('type', 'password');
                 }
@@ -32,7 +40,8 @@
                 this.innerText = 'Copied!';
                 this.classList.add('btn-success');
 
-                setTimeout(() => {
+                clearTimeout(copyReset);
+                copyReset = setTimeout(() => {
                     this.innerText = 'Copy to Clipboard';
                     this.classList.remove('btn-success');
                 }, 5000);

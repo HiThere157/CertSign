@@ -40,7 +40,7 @@
                             <!-- only show transfer, if current user has permission -->
                             <button name="changeOwnerModalBtn" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changeOwnerModal" data-bs-changeId="{{ $root_certificate->id }}">Transfer</button>
                             <button name="deleteModalBtn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCertificateModal" data-bs-deleteId="{{ $root_certificate->id }}">Delete</button>
-                            @endcan
+                        @endcan
                         <button name="viewModalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewCertificateModal" data-bs-viewId="{{ $root_certificate->id }}">View</button>
                     </td>
                 </tr>
@@ -167,7 +167,7 @@
             $('#viewFileCsr').find('textarea').remove();
             $('#viewFileConfig').find('textarea').remove();
 
-            $('#viewEncryptionKey').prop('href', '');
+            $('[name="viewEncryptionKey"]').prop('href', '');
 
             var response = await fetch("{{ route('certificate.view', ':id')}}".replace(':id', id));
             var certificateInfo = await response.json();
@@ -203,7 +203,7 @@
             $(textareaHTML).text(certificateInfo.files.csr).appendTo('#viewFileCsr');
             $(textareaHTML).text(certificateInfo.files.cnf).appendTo('#viewFileConfig');
 
-            $('#viewEncryptionKey').prop('href', "{{ route('encryptionkey.view', ':id')}}".replace(':id', id));
+            $('[name="viewEncryptionKey"]').prop('href', "{{ route('encryptionkey.view', ':id')}}".replace(':id', id));
         }
 
         $(document).ready(function() {

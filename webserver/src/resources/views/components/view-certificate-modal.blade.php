@@ -82,14 +82,18 @@
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="viewFileCertificate" role="tabpanel"></div>
-                        <div class="tab-pane fade" id="viewFileKey" role="tabpanel"></div>
+                        <div class="tab-pane fade" id="viewFileKey" role="tabpanel">
+                            <a href="" name="viewEncryptionKey" class="btn btn-warning d-block mx-auto w-50 mt-2">Show Encryption Password</a>
+                        </div>
                         <div class="tab-pane fade" id="viewFileCsr" role="tabpanel"></div>
                         <div class="tab-pane fade" id="viewFileConfig" role="tabpanel"></div>
-                        <div class="tab-pane fade d-flex flex-column align-items-center" id="viewFileDownload" role="tabpanel">
-                            <span class="d-block mt-2">Download Certificate and Encrypted Private Key:</span>
-                            <div class="d-flex">
-                                <button class="btn btn-primary me-1" id="viewDownloadFiles">Download</button>
-                                <a href="" id="viewEncryptionKey" class="btn btn-warning ms-1">Show Encryption Password</a>
+                        <div class="tab-pane fade" id="viewFileDownload" role="tabpanel">
+                            <div class="d-flex flex-column align-items-center">
+                                <span class="d-block mt-2">Download Certificate and Encrypted Private Key:</span>
+                                <div class="d-flex">
+                                    <button class="btn btn-primary me-1" id="viewDownloadFiles">Download</button>
+                                    <a href="" name="viewEncryptionKey" class="btn btn-warning ms-1">Show Encryption Password</a>
+                                </div>
                             </div>
                         </div>
                     </div>
