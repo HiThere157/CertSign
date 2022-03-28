@@ -267,7 +267,7 @@
                 var key = $('#viewFileKey').find('textarea').val();
 
                 download(certificate, 'certificate.cer');
-                download(key, 'private_key.key');
+                download(key, 'encrypted_private_key.key');
             });
 
             //set form action to correct route

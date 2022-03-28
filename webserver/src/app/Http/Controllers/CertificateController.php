@@ -133,7 +133,7 @@ class CertificateController extends Controller
 
     private function generateNewEncryptionKey()
     {
-        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randstring = '';
         for ($i = 0; $i < 20; $i++) {
             $randstring .= $characters[rand(0, strlen($characters)-1)];
