@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionController;
-use App\Http\Controllers\ReauthController;
 
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\EncryptionKeyController;
@@ -30,8 +29,8 @@ Route::get('/logout', [SessionController::class, 'logout'])->name('logout');
 Route::get('/register', [RegistrationController::class, 'index'])->name('register');
 Route::post('/register', [RegistrationController::class, 'register']);
 
-Route::get('/confirm-password', [ReauthController::class, 'index'])->middleware('auth')->name('password.confirm');
-Route::post('/confirm-password', [ReauthController::class, 'reauth'])->middleware(['auth', 'throttle:6,1']);
+Route::get('/confirm-password', [SessionController::class, 'reauth_index'])->middleware('auth')->name('password.confirm');
+Route::post('/confirm-password', [SessionController::class, 'reauth'])->middleware(['auth', 'throttle:6,1']);
 
 Route::get('/certificates', [CertificateController::class, 'index'])->middleware('auth')->name('certificates');
 Route::post('/certificate/add', [CertificateController::class, 'add'])->middleware('auth')->name('certificate.add');

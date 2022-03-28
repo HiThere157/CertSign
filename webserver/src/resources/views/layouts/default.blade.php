@@ -40,8 +40,7 @@
         <div class="container-fluid">
             @yield('content')
         </div>
-        
-        <x-footer />
+
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     </body>
 </html>
