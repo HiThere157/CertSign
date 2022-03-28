@@ -36,6 +36,6 @@ Route::get('/certificates', [CertificateController::class, 'index'])->middleware
 Route::post('/certificate/add', [CertificateController::class, 'add'])->middleware('auth')->name('certificate.add');
 Route::get('/certificate/delete/{id}', [CertificateController::class, 'delete'])->middleware('auth')->name('certificate.delete');
 Route::get('/certificate/view/{id}', [CertificateController::class, 'view'])->middleware('auth')->name('certificate.view');
-Route::post('certificate/changeOwner/{id}', [CertificateController::class, 'changeOwner'])->middleware('auth')->name('certificate.changeOwner');
+Route::post('certificate/changeOwner/{id}', [CertificateController::class, 'changeOwner'])->middleware(['password.confirm'])->name('certificate.changeOwner');
 
 Route::get('/encryptionkey/view/{id}', [EncryptionKeyController::class, 'view'])->middleware(['password.confirm'])->name('encryptionkey.view');

@@ -3,7 +3,7 @@
 @section('content')
     <div class="alert alert-danger w-50 mx-auto mt-4 d-flex align-items-center" role="alert">
         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
-        This Page contains sensitive information. Confirm your Password before you continue.
+        Please confirm your Password before you continue.
     </div>
 
     <form class="rounded shadow m-auto w-25 p-4 mt-3" style="min-width: 460px;" action="{{ route('password.confirm') }}" method="post">
