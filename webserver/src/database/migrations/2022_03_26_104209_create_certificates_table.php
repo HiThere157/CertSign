@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('created_by_id');
-            $table->integer('created_by_id_original')->nullable();
+            $table->integer('owner_id');
             $table->string('valid_from');
             $table->string('valid_to');
             $table->string('issuer_id')->nullable();

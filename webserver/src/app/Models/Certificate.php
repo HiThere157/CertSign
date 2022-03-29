@@ -14,6 +14,7 @@ class Certificate extends Model
     protected $fillable = [
         'name',
         'created_by_id',
+        'owner_id',
         'valid_from',
         'valid_to',
         'issuer_id',
@@ -26,7 +27,12 @@ class Certificate extends Model
         return floor((strtotime($this->valid_to) - time()) / 86400);
     }
 
-    public function user()
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function creator()
     {
         return $this->belongsTo(User::class, 'created_by_id');
     }

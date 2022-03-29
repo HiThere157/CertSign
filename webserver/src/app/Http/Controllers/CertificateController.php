@@ -71,14 +71,13 @@ class CertificateController extends Controller
 
         $certificate = Certificate::find($id);
         if($certificate){
-            if(!(Gate::allows('isAdmin') || Gate::allows('owns-cert', $certificate))){
+            if(!Gate::allows('owns-cert', $certificate)){
                 return redirect()->route('certificates')->withErrors([
                     'error' => 'No Permission! Only the owner of this certificate can change the owner.'
                 ]);
             }
 
-            $certificate->created_by_id_original = $certificate->created_by_id;
-            $certificate->created_by_id = $request->input('newOwner');
+            $certificate->owner_id = $request->input('newOwner');
             $certificate->save();
         }
 
@@ -150,6 +149,7 @@ class CertificateController extends Controller
         $certificate = new Certificate();
         $certificate->name = $request->input('name');
         $certificate->created_by_id = auth()->user()->id;
+        $certificate->owner_id = auth()->user()->id;
         $certificate->valid_from = date("Y-m-d");
         $certificate->valid_to = $request->input('valid_to');
         $certificate->issuer_id = $request->input('issuer');
@@ -191,7 +191,7 @@ class CertificateController extends Controller
 
         $configContent = Blade::render(Storage::disk('local')->get('certificates\openssl.blade.cnf'), [
             'commonName' => $certificate->name,
-            'created_by' => $certificate->user->username,
+            'created_by' => $certificate->creator->username,
             'subjects' => $subjectAltNames ?? [],
             'ca' => $certificate->self_signed ? 'TRUE' : 'FALSE',
         ]);
@@ -203,7 +203,7 @@ class CertificateController extends Controller
             'private_key_type' => OPENSSL_KEYTYPE_RSA,
         ]);
         
-        $csr = openssl_csr_new(['commonName' => $certificate->name, 'organizationalUnitName' => $certificate->user->username], $privateKey, [
+        $csr = openssl_csr_new(['commonName' => $certificate->name, 'organizationalUnitName' => $certificate->creator->username], $privateKey, [
             'config' => $confPath,
             'digest_alg' => 'sha256'
         ]);

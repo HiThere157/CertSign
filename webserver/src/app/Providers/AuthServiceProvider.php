@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('owns-cert', function($user, $certificate) {
-            return $user->id == $certificate->created_by_id || $user->role == 'admin';
+            return $user->id == $certificate->owner_id || $user->role == 'admin';
         });
     }
 }

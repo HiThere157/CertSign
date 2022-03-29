@@ -10,7 +10,7 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Created by</th>
+                <th>Owner</th>
                 <th>Valid From</th>
                 <th>Valid To (Days remaining)</th>
                 <th>Serial Number</th>
@@ -31,7 +31,7 @@
                             @endif
                         </span>
                     </td>
-                    <td>{{ $root_certificate->user->username }}</td>
+                    <td>{{ $root_certificate->owner->username }}</td>
                     <td>{{ $root_certificate->valid_from }}</td>
                     <td>{{ $root_certificate->valid_to }} ({{ $root_certificate->daysValid() }} days)</td>
                     <td>0{{ dechex($root_certificate->serial_number) }}</td>
@@ -59,7 +59,7 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Created by</th>
+                <th>Owner</th>
                 <th>Issuer</th>
                 <th>Valid From</th>
                 <th>Valid To (Days remaining)</th>
@@ -81,7 +81,7 @@
                             @endif
                         </span>
                     </td>
-                    <td>{{ $certificate->user->username }}</td>
+                    <td>{{ $certificate->owner->username }}</td>
                     <td>[0{{ dechex($certificate->issuer->serial_number) }}] {{ $certificate->issuer->name }}</td>
                     <td>{{ $certificate->valid_from }}</td>
                     <td>{{ $certificate->valid_to }} ({{ $certificate->daysValid() }} days)</td>

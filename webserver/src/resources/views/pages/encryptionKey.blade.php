@@ -33,18 +33,18 @@
     </div>
 
     <script>
+        //https://stackoverflow.com/a/64908345
+        function download(content, filename){
+            var a = document.createElement('a')
+            var blob = new Blob([content], {'type': 'text/plain'})
+            var url = URL.createObjectURL(blob)
+
+            a.setAttribute('href', url)
+            a.setAttribute('download', filename)
+            a.click()
+        }
+
         $(document).ready(function() {
-            //https://stackoverflow.com/a/64908345
-            function download(content, filename){
-                var a = document.createElement('a')
-                var blob = new Blob([content], {'type': 'text/plain'})
-                var url = URL.createObjectURL(blob)
-
-                a.setAttribute('href', url)
-                a.setAttribute('download', filename)
-                a.click()
-            }
-
             $('#toggleVisibilityBtn').click(function() {
                 var visibilityReset;
 
