@@ -10,10 +10,12 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Certificate;
 use App\Models\EncryptionKey;
+use App\Models\User;
 
 class CertificateController extends Controller
 {
-    public function index()
+    //GET: index page for certificate management
+    public function certificates_index()
     {
         return view('pages.certificates', [
             'root_certificates' => Certificate::all()->where('self_signed', true),
@@ -21,7 +23,71 @@ class CertificateController extends Controller
         ]);
     }
 
-    public function view($id)
+    //GET: index page for viewing a encryption key or private key
+    public function encryptionKey_index($id)
+    {
+        $certificate = Certificate::find($id);
+
+        if($certificate) {
+            if(!Gate::allows('owns-cert', $certificate)) {
+                return redirect()->route('certificates')->withErrors([
+                    'error' => 'No Permission! Contact the owner of this certificate to get the private key.'
+                ]);
+            }
+
+            $storagePath = 'certificates/' . dechex($certificate->serial_number);
+
+            $encryptionKey = Crypt::decryptString($certificate->encryptionKey->key);
+            $privateKey = openssl_pkey_get_private(Storage::disk('local')->get($storagePath . '/cert.key'), $encryptionKey);
+            openssl_pkey_export($privateKey, $privateKeyOut, null, ['config' => storage_path('app/' . $storagePath . '/openssl.cnf')]);
+
+            return view('pages.encryptionkey', [
+                'encryptionKey' => $encryptionKey,
+                'privateKey' => $privateKeyOut,
+                'certificateId' => $certificate->id
+            ]);
+        }
+
+        return redirect()->route('certificates');
+    }
+
+    //GET: index page to change the owner of a certificate
+    public function changeOwner_index($id)
+    {
+        $certificate = Certificate::find($id);
+        $all_users = User::all();
+
+        return view('pages.changeOwner', [
+            'certificateId' => $id,
+            'all_users' => $all_users
+        ]);
+    }
+
+    //POST: change the owner of a certificate
+    public function changeOwner(Request $request, $id)
+    {
+        $this->validate($request, [
+            'newOwner' => 'required'
+        ]);
+
+        $certificate = Certificate::find($id);
+        if($certificate){
+            if(!(Gate::allows('isAdmin') || Gate::allows('owns-cert', $certificate))){
+                return redirect()->route('certificates')->withErrors([
+                    'error' => 'No Permission! Only the owner of this certificate can change the owner.'
+                ]);
+            }
+
+            $certificate->created_by_id_original = $certificate->created_by_id;
+            $certificate->created_by_id = $request->input('newOwner');
+            $certificate->save();
+        }
+
+        return redirect()->route('certificates');
+    }
+
+    //GET: get all information about a certificate
+    public function getInformation($id)
     {
         $db_certificate = Certificate::find($id);
 
@@ -50,6 +116,7 @@ class CertificateController extends Controller
         ];
     }
 
+    //GET: soft delete a certificate
     public function delete($id)
     {
         $certificate = Certificate::find($id);
@@ -67,28 +134,7 @@ class CertificateController extends Controller
         return redirect()->route('certificates');
     }
 
-    public function changeOwner(Request $request, $id)
-    {
-        $this->validate($request, [
-            'newOwner' => 'required'
-        ]);
-
-        $certificate = Certificate::find($id);
-        if($certificate){
-            if(!(Gate::allows('isAdmin') || Gate::allows('owns-cert', $certificate))){
-                return redirect()->route('certificates')->withErrors([
-                    'error' => 'No Permission! Only the owner of this certificate can change the owner.'
-                ]);
-            }
-
-            $certificate->created_by_id_original = $certificate->created_by_id;
-            $certificate->created_by_id = $request->input('newOwner');
-            $certificate->save();
-        }
-
-        return redirect()->route('certificates');
-    }
-
+    //POST: create a new certificate
     public function add(Request $request)
     {
         $this->validate($request, [
@@ -130,7 +176,6 @@ class CertificateController extends Controller
         Storage::disk('local')->append('certificates/serials.srl', $newSerial);
         return $newSerial;
     }
-
     private function generateNewEncryptionKey()
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -140,7 +185,6 @@ class CertificateController extends Controller
         }
         return $randstring;
     }
-
     private function generateNewCertificate(Certificate $certificate, $subjectAltNames)
     {
         $storagePath = 'certificates/' . dechex($certificate->serial_number);

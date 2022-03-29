@@ -5,7 +5,6 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionController;
 
 use App\Http\Controllers\CertificateController;
-use App\Http\Controllers\EncryptionKeyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,10 +31,12 @@ Route::post('/register', [RegistrationController::class, 'register']);
 Route::get('/confirm-password', [SessionController::class, 'reauth_index'])->middleware('auth')->name('password.confirm');
 Route::post('/confirm-password', [SessionController::class, 'reauth'])->middleware(['auth', 'throttle:6,1']);
 
-Route::get('/certificates', [CertificateController::class, 'index'])->middleware('auth')->name('certificates');
+Route::get('/certificates', [CertificateController::class, 'certificates_index'])->middleware('auth')->name('certificates');
 Route::post('/certificate/add', [CertificateController::class, 'add'])->middleware('auth')->name('certificate.add');
 Route::get('/certificate/delete/{id}', [CertificateController::class, 'delete'])->middleware('auth')->name('certificate.delete');
-Route::get('/certificate/view/{id}', [CertificateController::class, 'view'])->middleware('auth')->name('certificate.view');
-Route::post('certificate/changeOwner/{id}', [CertificateController::class, 'changeOwner'])->middleware(['password.confirm'])->name('certificate.changeOwner');
+Route::get('/certificate/view/{id}', [CertificateController::class, 'getInformation'])->middleware('auth')->name('certificate.view');
 
-Route::get('/encryptionkey/view/{id}', [EncryptionKeyController::class, 'view'])->middleware(['password.confirm'])->name('encryptionkey.view');
+Route::get('/certificate/changeOwner/{id}', [CertificateController::class, 'changeOwner_index'])->middleware(['password.confirm'])->name('certificate.changeOwner.index');
+Route::post('/certificate/changeOwner/{id}', [CertificateController::class, 'changeOwner'])->middleware(['password.confirm'])->name('certificate.changeOwner');
+
+Route::get('/encryptionkey/view/{id}', [CertificateController::class, 'encryptionKey_index'])->middleware(['password.confirm'])->name('encryptionkey.view.index');

@@ -38,7 +38,7 @@
                     <td>
                         @can('owns-cert', $root_certificate)
                             <!-- only show transfer, if current user has permission -->
-                            <button name="changeOwnerModalBtn" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changeOwnerModal" data-bs-changeId="{{ $root_certificate->id }}">Transfer</button>
+                            <a href="{{ route('certificate.changeOwner.index', $root_certificate->id) }}" class="btn btn-warning">Transfer</a>
                             <button name="deleteModalBtn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCertificateModal" data-bs-deleteId="{{ $root_certificate->id }}">Delete</button>
                         @endcan
                         <button name="viewModalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewCertificateModal" data-bs-viewId="{{ $root_certificate->id }}">View</button>
@@ -89,7 +89,7 @@
                     <td>
                         @can('owns-cert', $certificate)
                             <!-- only show transfer and delete, if current user has permission -->
-                            <button name="changeOwnerModalBtn" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changeOwnerModal" data-bs-changeId="{{ $certificate->id }}">Transfer</button>
+                            <a href="{{ route('certificate.changeOwner.index', $certificate->id) }}" class="btn btn-warning">Transfer</a>
                             <button name="deleteModalBtn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCertificateModal" data-bs-deleteId="{{ $certificate->id }}">Delete</button>
                         @endcan
                         <button name="viewModalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewCertificateModal" data-bs-viewId="{{ $certificate->id }}">View</button>
@@ -102,7 +102,6 @@
     <x-add-certificate-modal :rootCertificates="$root_certificates" />
     <x-view-certificate-modal />
     <x-delete-certificate-modal />
-    <x-change-owner-modal />
 
     <script>
         //https://stackoverflow.com/a/64908345
@@ -203,7 +202,7 @@
             $(textareaHTML).text(certificateInfo.files.csr).appendTo('#viewFileCsr');
             $(textareaHTML).text(certificateInfo.files.cnf).appendTo('#viewFileConfig');
 
-            $('[name="viewEncryptionKey"]').prop('href', "{{ route('encryptionkey.view', ':id')}}".replace(':id', id));
+            $('[name="viewEncryptionKey"]').prop('href', "{{ route('encryptionkey.view.index', ':id')}}".replace(':id', id));
         }
 
         $(document).ready(function() {
@@ -268,11 +267,6 @@
 
                 download(certificate, 'certificate.cer');
                 download(key, 'encrypted_private_key.key');
-            });
-
-            //set form action to correct route
-            $('[name="changeOwnerModalBtn"]').click(function() {
-                $('#changeOwnerForm').prop('action', "{{ route('certificate.changeOwner', ':id')}}".replace(':id', $(this).attr('data-bs-changeId')));
             });
 
             //set confirm button to correct route
