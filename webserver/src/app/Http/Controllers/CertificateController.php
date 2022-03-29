@@ -54,7 +54,6 @@ class CertificateController extends Controller
     //GET: index page to change the owner of a certificate
     public function changeOwner_index($id)
     {
-        $certificate = Certificate::find($id);
         $all_users = User::all();
 
         return view('pages.changeOwner', [

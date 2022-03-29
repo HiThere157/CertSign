@@ -1,6 +1,11 @@
 @extends('layouts.default')
 
 @section('content')
+    <div class="alert alert-warning w-50 mx-auto mt-4 d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        Do not share your encryption key or the private key with anyone!
+    </div>
+
     <div class="rounded shadow m-auto w-25 p-4 mt-3">
         <h1>Encryption Key (Id: {{ $certificateId }})</h1>
 
