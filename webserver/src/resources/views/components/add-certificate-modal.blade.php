@@ -39,7 +39,6 @@
                                 <button class="btn btn-outline-secondary" type="button" id="addIncrement1">+1 Month</button>
                                 <button class="btn btn-outline-secondary" type="button" id="addIncrement2">+1 Year</button>
                             </div>
-
                         </div>
                     </div>
 
