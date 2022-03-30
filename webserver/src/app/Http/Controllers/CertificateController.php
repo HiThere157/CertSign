@@ -51,39 +51,6 @@ class CertificateController extends Controller
         return redirect()->route('certificates');
     }
 
-    //GET: index page to change the owner of a certificate
-    public function changeOwner_index($id)
-    {
-        $all_users = User::all();
-
-        return view('pages.changeOwner', [
-            'certificateId' => $id,
-            'all_users' => $all_users
-        ]);
-    }
-
-    //POST: change the owner of a certificate
-    public function changeOwner(Request $request, $id)
-    {
-        $this->validate($request, [
-            'newOwner' => 'required'
-        ]);
-
-        $certificate = Certificate::find($id);
-        if($certificate){
-            if(!Gate::allows('owns-cert', $certificate)){
-                return redirect()->route('certificates')->withErrors([
-                    'error' => 'No Permission! Only the owner of this certificate can change the owner.'
-                ]);
-            }
-
-            $certificate->owner_id = $request->input('newOwner');
-            $certificate->save();
-        }
-
-        return redirect()->route('certificates');
-    }
-
     //GET: get all information about a certificate
     public function getInformation($id)
     {
@@ -146,18 +113,33 @@ class CertificateController extends Controller
             ]);
         }
 
+        $issuer = Certificate::find($request->input('issuer'));
+        if($issuer) {
+            if(!Gate::allows('has-permission', $issuer)) {
+                return redirect()->route('certificates')->withErrors([
+                    'issuer' => 'No Permission! Contact the owner of this certificate to get permission to sign with this Certificate.'
+                ]);
+            }
+
+            if(!$issuer->self_signed) {
+                return redirect()->route('certificates')->withErrors([
+                    'issuer' => 'Cannot sign with a non self-signed certificate'
+                ]);
+            }
+        }
+
         $certificate = new Certificate();
         $certificate->name = $request->input('name');
         $certificate->created_by_id = auth()->user()->id;
         $certificate->owner_id = auth()->user()->id;
         $certificate->valid_from = date("Y-m-d");
         $certificate->valid_to = $request->input('valid_to');
-        $certificate->issuer_id = $request->input('issuer');
+        $certificate->issuer_id = $issuer->id ?? null;
         $certificate->serial_number = $this->generateNewSerial();
         $certificate->self_signed = $request->input('self_signed') == 'on';
         $certificate->save();
 
-        $this->generateNewCertificate($certificate, $request->input('san'));
+        $this->generateNewCertificate($certificate, $issuer, $request->input('san'));
 
         return redirect()->route('certificates');
     }
@@ -184,7 +166,7 @@ class CertificateController extends Controller
         }
         return $randstring;
     }
-    private function generateNewCertificate(Certificate $certificate, $subjectAltNames)
+    private function generateNewCertificate(Certificate $certificate, $issuer, $subjectAltNames)
     {
         $storagePath = 'certificates/' . dechex($certificate->serial_number);
         $confPath = storage_path('app/' . $storagePath . '/openssl.cnf');
@@ -208,8 +190,8 @@ class CertificateController extends Controller
             'digest_alg' => 'sha256'
         ]);
         
-        if(!$certificate->self_signed) {
-            $issuerStoragePath = 'certificates/' . dechex(Certificate::find($certificate->issuer_id)->serial_number);
+        if($issuer) {
+            $issuerStoragePath = 'certificates/' . dechex($issuer->serial_number);
             $issuerCertificate = Storage::disk('local')->get($issuerStoragePath . '/cert.cer');
             $issuerPrivateKey = openssl_pkey_get_private(Storage::disk('local')->get($issuerStoragePath . '/cert.key'), Crypt::decryptString(Certificate::find($certificate->issuer_id)->encryptionKey->key));
         }

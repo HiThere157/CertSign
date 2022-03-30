@@ -5,7 +5,7 @@
         @csrf
 
         <div class="form-outline mb-4">
-            <input type="text" id="loginUsername" name="username" class="form-control" spellcheck="false" />
+            <input type="text" id="loginUsername" name="username" class="form-control" spellcheck="false" autofocus />
             <label class="form-label" for="loginUsername">Username</label>
         </div>
 

@@ -1,0 +1,11 @@
+[ req ]
+distinguished_name = req_distinguished_name
+
+[ req_distinguished_name ]
+commonName = "Test"
+organizationalUnitName = "kochda6"
+basicConstraints = CA:FALSE
+
+[ v3_req ]
+
+[san]

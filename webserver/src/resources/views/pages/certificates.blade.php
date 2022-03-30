@@ -38,7 +38,7 @@
                     <td>
                         @can('owns-cert', $root_certificate)
                             <!-- only show transfer, if current user has permission -->
-                            <a href="{{ route('certificate.changeOwner.index', $root_certificate->id) }}" class="btn btn-warning">Transfer</a>
+                            <a href="{{ route('permissions', $root_certificate->id) }}" class="btn btn-warning">Permissions</a>
                             <button name="deleteModalBtn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCertificateModal" data-bs-deleteId="{{ $root_certificate->id }}">Delete</button>
                         @endcan
                         <button name="viewModalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewCertificateModal" data-bs-viewId="{{ $root_certificate->id }}">View</button>
@@ -89,7 +89,7 @@
                     <td>
                         @can('owns-cert', $certificate)
                             <!-- only show transfer and delete, if current user has permission -->
-                            <a href="{{ route('certificate.changeOwner.index', $certificate->id) }}" class="btn btn-warning">Transfer</a>
+                            <a href="{{ route('permissions', $certificate->id) }}" class="btn btn-warning">Permissions</a>
                             <button name="deleteModalBtn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCertificateModal" data-bs-deleteId="{{ $certificate->id }}">Delete</button>
                         @endcan
                         <button name="viewModalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewCertificateModal" data-bs-viewId="{{ $certificate->id }}">View</button>

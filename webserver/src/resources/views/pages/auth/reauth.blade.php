@@ -10,7 +10,7 @@
         @csrf
 
         <div class="form-outline mb-4">
-            <input type="password" id="reauthPassword" name="password" class="form-control" />
+            <input type="password" id="reauthPassword" name="password" class="form-control" autofocus />
             <label class="form-label" for="reauthPassword">Confirm your Password</label>
         </div>
 

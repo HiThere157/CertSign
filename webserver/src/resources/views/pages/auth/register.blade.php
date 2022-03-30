@@ -5,7 +5,7 @@
         @csrf
 
         <div class="form-outline mb-4">
-            <input type="text" id="loginUsername" name="username" class="form-control" spellcheck="false" />
+            <input type="text" id="loginUsername" name="username" class="form-control" spellcheck="false" autofocus />
             <label class="form-label" for="loginUsername">Username</label>
         </div>
 
@@ -21,7 +21,7 @@
         
         <div class="form-outline mb-4">
             <input type="password" id="loginPassword" name="password_confirmation" class="form-control" />
-            <label class="form-label" for="loginPassword">Password</label>
+            <label class="form-label" for="loginPassword">Confirm your Password</label>
         </div>
 
         <button type="submit" class="btn btn-primary btn-block mb-4 w-100">Register</button>

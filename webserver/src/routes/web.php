@@ -5,6 +5,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionController;
 
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +37,9 @@ Route::post('/certificate/add', [CertificateController::class, 'add'])->middlewa
 Route::get('/certificate/delete/{id}', [CertificateController::class, 'delete'])->middleware('auth')->name('certificate.delete');
 Route::get('/certificate/view/{id}', [CertificateController::class, 'getInformation'])->middleware('auth')->name('certificate.view');
 
-Route::get('/certificate/changeOwner/{id}', [CertificateController::class, 'changeOwner_index'])->middleware(['password.confirm'])->name('certificate.changeOwner.index');
-Route::post('/certificate/changeOwner/{id}', [CertificateController::class, 'changeOwner'])->middleware(['password.confirm'])->name('certificate.changeOwner');
+Route::get('/certificate/permissions/{id}', [PermissionController::class, 'permission_index'])->middleware(['password.confirm'])->name('permissions');
+Route::post('/certificate/changeOwner/{id}', [PermissionController::class, 'changeOwner'])->middleware(['password.confirm'])->name('permissions.changeOwner');
+Route::post('/certificate/addPermission/{id}', [PermissionController::class, 'add'])->middleware(['password.confirm'])->name('permissions.add');
+Route::get('/certificate/deletePermission/{id}', [PermissionController::class, 'delete'])->middleware(['password.confirm'])->name('permissions.delete');
 
 Route::get('/encryptionkey/view/{id}', [CertificateController::class, 'encryptionKey_index'])->middleware(['password.confirm'])->name('encryptionkey.view.index');
