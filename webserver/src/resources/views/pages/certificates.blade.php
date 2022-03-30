@@ -35,7 +35,7 @@
                     <td>{{ $root_certificate->valid_from }}</td>
                     <td>{{ $root_certificate->valid_to }} ({{ $root_certificate->daysValid() }} days)</td>
                     <td>0{{ dechex($root_certificate->serial_number) }}</td>
-                    <td>
+                    <td class="text-end">
                         @can('owns-cert', $root_certificate)
                             <!-- only show transfer, if current user has permission -->
                             <a href="{{ route('permissions', $root_certificate->id) }}" class="btn btn-warning">Permissions</a>
@@ -86,7 +86,7 @@
                     <td>{{ $certificate->valid_from }}</td>
                     <td>{{ $certificate->valid_to }} ({{ $certificate->daysValid() }} days)</td>
                     <td>0{{ dechex($certificate->serial_number) }}</td>
-                    <td>
+                    <td class="text-end">
                         @can('owns-cert', $certificate)
                             <!-- only show transfer and delete, if current user has permission -->
                             <a href="{{ route('permissions', $certificate->id) }}" class="btn btn-warning">Permissions</a>
