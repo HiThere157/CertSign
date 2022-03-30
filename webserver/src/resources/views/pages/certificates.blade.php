@@ -27,7 +27,7 @@
                             @if($root_certificate->daysValid() > 0)
                                 <span class="badge bg-success">Valid</span>
                             @else
-                                <span class="badge bg-danger">Invalid</span>
+                                <span class="badge bg-danger">Expired</span>
                             @endif
                         </span>
                     </td>
