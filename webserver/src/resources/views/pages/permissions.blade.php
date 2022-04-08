@@ -14,13 +14,13 @@
                 <button id="addPermissionBtn" type="button" class="btn btn-primary ms-1" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addPermissionModal">Add User Permission</button>
             </div>
         </div>
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover tablesorter">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Added by</th>
                     <th>Added</th>
-                    <th style="width: 17rem;">Actions</th>
+                    <th class="sorter-false" style="width: 17rem;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,10 +72,12 @@
 
     <script>
         $(document).ready(function() {
+            //apply table sorter
+            $(".table").tablesorter();
+
             $('[name="deleteModalBtn"]').click(function() {
                 $('#deletePermissionBtn').prop('href', "{{ route('permissions.delete', ':id')}}".replace(':id', $(this).attr('data-bs-deleteId')));
             });
         });
     </script>
-
 @stop

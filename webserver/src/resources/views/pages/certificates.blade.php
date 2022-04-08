@@ -2,10 +2,10 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mx-5">
-        <h1>Root Certificates</h1>
+        <h1 class="mt-3">Root Certificates</h1>
         <button type="button" name="addModalBtn" class="btn btn-primary" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addCertificateModal" data-bs-selfSigned="true">Add Root Certificate</button>
     </div>
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover tablesorter">
         <thead>
             <tr>
                 <th>Id</th>
@@ -14,7 +14,7 @@
                 <th>Valid From</th>
                 <th>Valid To (Days remaining)</th>
                 <th>Serial Number</th>
-                <th style="width: 17rem;">Actions</th>
+                <th class="sorter-false" style="width: 17rem;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -48,13 +48,11 @@
         </tbody>
     </table>
 
-    <hr class="my-3">
-
     <div class="d-flex justify-content-between align-items-center mx-5">
-        <h1>Certificates</h1>
+        <h1 class="mt-3">Certificates</h1>
         <button type="button" name="addModalBtn" class="btn btn-primary" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addCertificateModal" data-bs-selfSigned="false">Add Certificate</button>
     </div>
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover tablesorter">
         <thead>
             <tr>
                 <th>Id</th>
@@ -64,7 +62,7 @@
                 <th>Valid From</th>
                 <th>Valid To (Days remaining)</th>
                 <th>Serial Number</th>
-                <th style="width: 17rem;">Actions</th>
+                <th class="sorter-false" style="width: 17rem;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -206,6 +204,9 @@
         }
 
         $(document).ready(function() {
+            //apply table sorter
+            $(".table").tablesorter();
+
             //set default values of valid_from and valid_to, and disable issuer input if self-signed
             $('[name="addModalBtn"]').click(function() {
                 updateAddModal.call(this, true);

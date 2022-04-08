@@ -13,6 +13,9 @@
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('certificates') ? 'active' : '' }}" href="{{ route('certificates') }}">Certificates</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('logs') ? 'active' : '' }}" href="{{ route('logs') }}">Logs</a>
+                </li>
 
             </ul>
             @auth

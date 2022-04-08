@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use App\Models\Certificate;
 use App\Models\User;
 use App\Models\Permission;
@@ -17,6 +18,7 @@ class PermissionController extends Controller
     
         $certificate = Certificate::find($id);
         if($certificate && Gate::allows('owns-cert', $certificate)){
+            Log::info('User ' . auth()->user()->username . ' accessed the permission page for certificate ' . $id . '.');
             return view('pages.permissions', [
                 'id' => $id,
                 'self_signed' => $certificate->self_signed,
@@ -43,6 +45,7 @@ class PermissionController extends Controller
                 ]);
             }
     
+            Log::info('User ' . auth()->user()->username . ' changed the owner of certificate ' . $id . ' to ' . $request->input('newOwner') . '.');
             $certificate->owner_id = $request->input('newOwner');
             $certificate->save();
         }
@@ -67,6 +70,7 @@ class PermissionController extends Controller
     
             $user = User::find($request->input('addUser'));
             if($user && Permission::where('certificate_id', $id)->where('user_id', $user->id)->count() == 0){
+                Log::info('User ' . auth()->user()->username . ' added permission for user ' . $user->username . ' to certificate ' . $id . '.');
                 $permission = new Permission();
                 $permission->user_id = $user->id;
                 $permission->added_by_id = auth()->user()->id;
@@ -89,6 +93,7 @@ class PermissionController extends Controller
                 ]);
             }
     
+            Log::info('User ' . auth()->user()->username . ' deleted permission ' . $id . ' from certificate ' . $permission->certificate->id . '.');
             $permission->delete();
         }
     

@@ -6,6 +6,7 @@ use App\Http\Controllers\SessionController;
 
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\LogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::get('/logout', [SessionController::class, 'logout'])->name('logout');
 
 Route::get('/register', [RegistrationController::class, 'index'])->name('register');
 Route::post('/register', [RegistrationController::class, 'register']);
+
+Route::get('/logs', [LogController::class, 'index'])->middleware('auth')->name('logs');
 
 Route::get('/confirm-password', [SessionController::class, 'reauth_index'])->middleware('auth')->name('password.confirm');
 Route::post('/confirm-password', [SessionController::class, 'reauth'])->middleware(['auth', 'throttle:6,1']);

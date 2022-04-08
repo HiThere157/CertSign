@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
 class RegistrationController extends Controller
@@ -20,6 +21,7 @@ class RegistrationController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
+        Log::info('User ' . $request->input('username') . ' registered.');
         $user = new User;
         $user->username = $request->input('username');
         $user->email = $request->input('email');

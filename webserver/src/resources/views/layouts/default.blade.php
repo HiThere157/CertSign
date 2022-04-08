@@ -6,7 +6,10 @@
 
         <title>CertSign</title>
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/jquery.tablesorter.min.css') }}">
         <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.tablesorter.min.js') }}"></script>
+        <script src="{{ asset('js/popper.min.js') }}"></script>
 
     </head>
     <body>

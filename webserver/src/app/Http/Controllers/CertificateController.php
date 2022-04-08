@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use App\Models\Certificate;
 use App\Models\EncryptionKey;
 use App\Models\User;
@@ -17,6 +18,7 @@ class CertificateController extends Controller
     //GET: index page for certificate management
     public function certificates_index()
     {
+        Log::info('User ' . auth()->user()->username . ' accessed the certificates page.');
         return view('pages.certificates', [
             'root_certificates' => Certificate::all()->where('self_signed', true),
             'certificates' => Certificate::all()->where('self_signed', false)
@@ -27,20 +29,21 @@ class CertificateController extends Controller
     public function encryptionKey_index($id)
     {
         $certificate = Certificate::find($id);
-
+        
         if($certificate) {
             if(!Gate::allows('owns-cert', $certificate)) {
                 return redirect()->route('certificates')->withErrors([
                     'error' => 'No Permission! Contact the owner of this certificate to get the private key.'
                 ]);
             }
-
+            
             $storagePath = 'certificates/' . dechex($certificate->serial_number);
-
+            
             $encryptionKey = Crypt::decryptString($certificate->encryptionKey->key);
             $privateKey = openssl_pkey_get_private(Storage::disk('local')->get($storagePath . '/cert.key'), $encryptionKey);
             openssl_pkey_export($privateKey, $privateKeyOut, null, ['config' => storage_path('app/' . $storagePath . '/openssl.cnf')]);
-
+            
+            Log::info('User ' . auth()->user()->username . ' accessed the encryption key page for certificate ' . $id . '.');
             return view('pages.encryptionkey', [
                 'encryptionKey' => $encryptionKey,
                 'privateKey' => $privateKeyOut,
@@ -68,6 +71,7 @@ class CertificateController extends Controller
         
         $certificate_decoded = openssl_x509_parse($certificate);
 
+        Log::info('User ' . auth()->user()->username . ' accessed the certificate information page for certificate ' . $id . '.');
         return [
             'certificate' => $db_certificate,
             'decoded' => $certificate_decoded,
@@ -92,6 +96,7 @@ class CertificateController extends Controller
                 ]);
             }
 
+            Log::info('User ' . auth()->user()->username . ' deleted certificate ' . $id . '.');
             $certificate->encryptionKey->delete();
             $certificate->delete();
         }
@@ -139,6 +144,7 @@ class CertificateController extends Controller
         $certificate->self_signed = $request->input('self_signed') == 'on';
         $certificate->save();
 
+        Log::info('User ' . auth()->user()->username . ' created certificate ' . $certificate->id . '.');
         $this->generateNewCertificate($certificate, $issuer, $request->input('san'));
 
         return redirect()->route('certificates');

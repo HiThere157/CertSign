@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class SessionController extends Controller
 {
@@ -21,6 +22,7 @@ class SessionController extends Controller
         ]);
 
         if(Auth::attempt($credentials, $request->has('stayLoggedIn'))) {
+            Log::info('User ' . Auth::user()->username . ' logged in.');
             $request->session()->regenerate();
 
             return redirect()->intended();
@@ -51,6 +53,7 @@ class SessionController extends Controller
             ]);
         }
      
+        Log::info('User ' . Auth::user()->username . ' reauthenticated.');
         $request->session()->passwordConfirmed();
      
         return redirect()->intended();
