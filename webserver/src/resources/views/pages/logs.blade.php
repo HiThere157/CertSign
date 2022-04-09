@@ -85,7 +85,7 @@
                         ]) style="width: 0;"> {{ $log['type'] }}
                     </td>
                     
-                    <td class="text-nowrap" style="width: 0;">{{ $log['controller'] }}</td>
+                    <td class="text-nowrap text-end" style="width: 0;">{{ $log['controller'] }}</td>
                     <td>{{ $log['description'] }}</td>
                 </tr>
             @endforeach
