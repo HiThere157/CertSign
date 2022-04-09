@@ -48,10 +48,21 @@ class LogController extends Controller
                         }
                     }
 
+                    $description = explode("] ", $description);
+                    $controller = $description[0] . "]";
+                    $message = implode("] ", array_slice($description, 1));
+
+                    //if no controller is found, undo split
+                    if(!preg_match('/\[\w+:\w+\]/', $controller) == 1){
+                        $message = $controller . " " . $message;
+                        $controller = "N/A";
+                    }
+
                     $logs[] = [
                         'time' => substr($log, 1, 19),
                         'type' => $info[0],
-                        'description' => $description
+                        'controller' => $controller,
+                        'description' => $message
                     ];
                 }
             }

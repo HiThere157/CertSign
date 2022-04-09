@@ -64,6 +64,7 @@
             <tr>
                 <th>Time</th>
                 <th>Type</th>
+                <th>Controller</th>
                 <th>Description</th>
             </tr>
         </thead>
@@ -73,7 +74,7 @@
                         'table-danger' => $log['type'] == 'EMERGENCY' || $log['type'] == 'ALERT' || $log['type'] == 'CRITICAL'
                     ])>
                     <td class="text-nowrap" style="width: 0;">{{ $log['time'] }}</td>
-
+                    
                     <td @class([
                         'text-nowrap',
                         'text-danger' => $log['type'] == 'EMERGENCY' || $log['type'] == 'ALERT' || $log['type'] == 'CRITICAL' || $log['type'] == 'ERROR',
@@ -83,7 +84,8 @@
                         'text-secondary' => $log['type'] == 'DEBUG'
                         ]) style="width: 0;"> {{ $log['type'] }}
                     </td>
-
+                    
+                    <td class="text-nowrap" style="width: 0;">{{ $log['controller'] }}</td>
                     <td>{{ $log['description'] }}</td>
                 </tr>
             @endforeach
