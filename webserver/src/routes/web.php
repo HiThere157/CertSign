@@ -41,7 +41,7 @@ Route::get('/certificate/delete/{id}', [CertificateController::class, 'delete'])
 Route::get('/certificate/view/{id}', [CertificateController::class, 'getInformation'])->middleware('auth')->name('certificate.view');
 
 Route::get('/certificate/permissions/{id}', [PermissionController::class, 'permission_index'])->middleware(['password.confirm'])->name('permissions');
-Route::post('/certificate/changeOwner/{id}', [PermissionController::class, 'changeOwner'])->middleware(['password.confirm'])->name('permissions.changeOwner');
+Route::post('/certificate/changeOwner/{id}', [PermissionController::class, 'change_owner'])->middleware(['password.confirm'])->name('permissions.changeOwner');
 Route::post('/certificate/addPermission/{id}', [PermissionController::class, 'add'])->middleware(['password.confirm'])->name('permissions.add');
 Route::get('/certificate/deletePermission/{id}', [PermissionController::class, 'delete'])->middleware(['password.confirm'])->name('permissions.delete');
 

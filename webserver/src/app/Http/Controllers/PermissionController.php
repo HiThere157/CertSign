@@ -18,7 +18,7 @@ class PermissionController extends Controller
     
         $certificate = Certificate::find($id);
         if($certificate && Gate::allows('owns-cert', $certificate)){
-            Log::info('User ' . auth()->user()->username . ' accessed the permission page for certificate ' . $id . '.');
+            Log::info('[PermissionController:permission_index] User ' . auth()->user()->username . ' accessed the permission page for certificate ' . $id . '.');
             return view('pages.permissions', [
                 'id' => $id,
                 'self_signed' => $certificate->self_signed,
@@ -31,7 +31,7 @@ class PermissionController extends Controller
     }
     
     //POST: change the owner of a certificate
-    public function changeOwner(Request $request, $id)
+    public function change_owner(Request $request, $id)
     {
         $this->validate($request, [
             'newOwner' => 'required'
@@ -44,10 +44,13 @@ class PermissionController extends Controller
                     'error' => 'No Permission! Only the owner of this certificate can change the owner.'
                 ]);
             }
-    
-            Log::info('User ' . auth()->user()->username . ' changed the owner of certificate ' . $id . ' to ' . $request->input('newOwner') . '.');
-            $certificate->owner_id = $request->input('newOwner');
-            $certificate->save();
+
+            $new_owner = User::find($request->input('newOwner'));
+            if($new_owner){
+                Log::info('[PermissionController:change_owner] User ' . auth()->user()->username . ' changed the owner of certificate ' . $id . ' to ' . $new_owner->username . '.');
+                $certificate->owner_id = $new_owner->id;
+                $certificate->save();
+            }
         }
     
         return redirect()->route('certificates');
@@ -70,7 +73,7 @@ class PermissionController extends Controller
     
             $user = User::find($request->input('addUser'));
             if($user && Permission::where('certificate_id', $id)->where('user_id', $user->id)->count() == 0){
-                Log::info('User ' . auth()->user()->username . ' added permission for user ' . $user->username . ' to certificate ' . $id . '.');
+                Log::info('[PermissionController:add] User ' . auth()->user()->username . ' added permission for user ' . $user->username . ' to certificate ' . $id . '.');
                 $permission = new Permission();
                 $permission->user_id = $user->id;
                 $permission->added_by_id = auth()->user()->id;
@@ -93,7 +96,7 @@ class PermissionController extends Controller
                 ]);
             }
     
-            Log::info('User ' . auth()->user()->username . ' deleted permission ' . $id . ' from certificate ' . $permission->certificate->id . '.');
+            Log::info('[PermissionController:delete] User ' . auth()->user()->username . ' deleted permission for user ' . $permission->user->username . ' from certificate ' . $permission->certificate->id . '.');
             $permission->delete();
         }
     

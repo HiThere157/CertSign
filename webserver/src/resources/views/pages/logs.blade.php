@@ -64,7 +64,7 @@
             <tr>
                 <th>Time</th>
                 <th>Type</th>
-                <th>Message</th>
+                <th>Description</th>
             </tr>
         </thead>
         <tbody>

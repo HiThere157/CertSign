@@ -59,8 +59,7 @@ class LogController extends Controller
 
         $pageinator = $this->paginate(array_reverse($logs), $n)->withQueryString()->withPath('/logs');
 
-        Log::info('User ' . auth()->user()->username . ' accessed the log page.');
-
+        Log::info('[LogController:index] User ' . auth()->user()->username . ' accessed the log page.');
         return view('pages.logs', [
             'logs' => $pageinator,
             'type' => $type,
