@@ -17,6 +17,11 @@ class LogController extends Controller
         $start_time = $request->input('start_time');
         $end_time = $request->input('end_time');
 
+        $n = $request->input('n'); 
+        if(!$n) {
+            $n = 20;
+        }
+
         $logs = array();
         $files = glob(storage_path('logs/*.log'));
         foreach ($files as $file) {
@@ -52,19 +57,21 @@ class LogController extends Controller
             }
         }
 
-        $pageinator = $this->paginate($logs)->withQueryString()->withPath('/logs');
+        $pageinator = $this->paginate(array_reverse($logs), $n)->withQueryString()->withPath('/logs');
 
         Log::info('User ' . auth()->user()->username . ' accessed the log page.');
+
         return view('pages.logs', [
             'logs' => $pageinator,
             'type' => $type,
             'query' => $query,
             'start_time' => $start_time,
-            'end_time' => $end_time
+            'end_time' => $end_time,
+            'n' => $n
         ]);
     }
 
-    public function paginate($items, $perPage = 20, $page = null)
+    public function paginate($items, $perPage, $page = null)
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);

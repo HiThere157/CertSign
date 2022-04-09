@@ -11,17 +11,33 @@
 
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" name="q" placeholder="Search Logs..." value="{{ $query }}">
-                    <button id="typeBtn" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Select Type</button>
-                    <input type="text" name="type" hidden>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li class="dropdown-item" style="cursor: pointer;">info</li>
-                        <li class="dropdown-item" style="cursor: pointer;">warning</li>
-                        <li class="dropdown-item" style="cursor: pointer;">error</li>
+                    <button id="typeBtn" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                    <input id="type" type="text" name="type" hidden>
+                    <ul class="dropdown-menu dropdown-menu-end" data-target-input="#type" data-target-btn="#typeBtn">
+                        <li class="dropdown-item">info</li>
+                        <li class="dropdown-item">warning</li>
+                        <li class="dropdown-item">error</li>
                         <li><hr class="dropdown-divider"></li>
-                        <li class="dropdown-item" style="cursor: pointer;">None Specified</li>
+                        <li class="dropdown-item">None Specified</li>
                     </ul>
                 </div>
 
+            </div>
+            <div>
+                <div class="d-flex">
+                    <label class="col-form-label text-nowrap">Results:</label>
+                    <input id="n" type="text" name="n" hidden>
+                    <div class="ms-2 dropdown">
+                        <button id="nBtn" class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                        <ul class="dropdown-menu" data-target-input="#n" data-target-btn="#nBtn">
+                            <li class="dropdown-item">10</li>
+                            <li class="dropdown-item">20</li>
+                            <li class="dropdown-item">50</li>
+                            <li class="dropdown-item">100</li>
+                            <li class="dropdown-item">500</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div>
                 <div class="d-flex">
@@ -37,7 +53,7 @@
             </div>
             <div>
                 <button id="resetBtn" type="button" style="width: 10rem;" class="btn btn-secondary">Reset</button>
-                <button type="submit" style="width: 10rem;" class="btn btn-primary">Search</button>
+                <button id="submitBtn type="submit" style="width: 10rem;" class="btn btn-primary">Search</button>
             </div>
         </div>
     </form>
@@ -53,18 +69,20 @@
         </thead>
         <tbody>
             @foreach($logs as $log)
-                <tr>
-                    <td class="text-nowrap">{{ $log['time'] }}</td>
+                <tr @class([
+                        'table-danger' => $log['type'] == 'EMERGENCY' || $log['type'] == 'ALERT' || $log['type'] == 'CRITICAL'
+                    ])>
+                    <td class="text-nowrap" style="width: 0;">{{ $log['time'] }}</td>
 
-                    @if($log['type'] == 'INFO')
-                        <td class="text-nowrap text-success">{{ $log['type'] }}</td>
-                    @elseif($log['type'] == 'WARNING')
-                        <td class="text-nowrap text-warning">{{ $log['type'] }}</td>
-                    @elseif($log['type'] == 'ERROR')
-                        <td class="text-nowrap text-danger">{{ $log['type'] }}</td>
-                    @else
-                        <td class="text-nowrap text-muted">{{ $log['type'] }}</td>
-                    @endif
+                    <td @class([
+                        'text-nowrap',
+                        'text-danger' => $log['type'] == 'EMERGENCY' || $log['type'] == 'ALERT' || $log['type'] == 'CRITICAL' || $log['type'] == 'ERROR',
+                        'text-warning' => $log['type'] == 'WARNING',
+                        'text-success' => $log['type'] == 'NOTICE',
+                        'text-info' => $log['type'] == 'INFO',
+                        'text-secondary' => $log['type'] == 'DEBUG'
+                        ]) style="width: 0;"> {{ $log['type'] }}
+                    </td>
 
                     <td>{{ $log['description'] }}</td>
                 </tr>
@@ -75,18 +93,23 @@
 
 
     <script>
-        function setDropdownValue(value) {
-            if(value == ""){
+        function setDropdownBySender(sender) {
+            var parent = $(sender).parent();
+            setDropdown(parent.attr('data-target-input'), parent.attr('data-target-btn'), $(sender).text())
+        }
+
+        function setDropdown(inputElement, btnElement, value) {
+            if(value == "") {
                 value = "None Specified";
             }
 
-            $('#typeBtn').text(value);
-            
-            if(value == "None Specified"){
+            $(btnElement).text(value);
+
+            if(value == "None Specified") {
                 value = "";
             }
             
-            $('input[name="type"]').val(value);
+            $(inputElement).val(value);
         }
 
         $(document).ready(function() {
@@ -94,21 +117,23 @@
             $(".table").tablesorter();
 
             //set previous dropdown value and start and end time
-            setDropdownValue("{{ $type }}");
-            $('#search_start').val("{{ $start_time }}");
-            $('#search_end').val("{{ $end_time }}");
+            setDropdown("#n", "#nBtn", "{{ $n }}");
+            setDropdown("#type", "#typeBtn", "{{ $type }}");
+            $("#search_start").val("{{ $start_time }}");
+            $("#search_end").val("{{ $end_time }}");
 
             //apply dropdown onclick
-            $('.dropdown-item').click(function(){
-                setDropdownValue($(this).text());
-            });
+            $(".dropdown-item").click(function() {
+                setDropdownBySender(this);
+            }).css("cursor", "pointer");
 
             //reset button onclick
-            $('#resetBtn').click(function(){
-                $('input[name="q"]').val("");
-                $('#search_start').val("");
-                $('#search_end').val("");
-                setDropdownValue("");
+            $("#resetBtn").click(function() {
+                $("input[name='q']").val("");
+                $("#search_start").val("");
+                $("#search_end").val("");
+                setDropdown("#n", "#nBtn", "20");
+                setDropdown("#type", "#typeBtn", "");
             });
         });
     </script>
