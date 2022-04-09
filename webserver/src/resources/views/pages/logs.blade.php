@@ -14,9 +14,14 @@
                     <button id="typeBtn" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
                     <input id="type" type="text" name="type" hidden>
                     <ul class="dropdown-menu dropdown-menu-end" data-target-input="#type" data-target-btn="#typeBtn">
+                        <li class="dropdown-item">debug</li>
                         <li class="dropdown-item">info</li>
+                        <li class="dropdown-item">notice</li>
                         <li class="dropdown-item">warning</li>
                         <li class="dropdown-item">error</li>
+                        <li class="dropdown-item">critical</li>
+                        <li class="dropdown-item">alert</li>
+                        <li class="dropdown-item">emergency</li>
                         <li><hr class="dropdown-divider"></li>
                         <li class="dropdown-item">None Specified</li>
                     </ul>
