@@ -36,9 +36,12 @@ Route::get('/confirm-password', [SessionController::class, 'reauth_index'])->mid
 Route::post('/confirm-password', [SessionController::class, 'reauth'])->middleware(['auth', 'throttle:6,1']);
 
 Route::get('/certificates', [CertificateController::class, 'certificates_index'])->middleware('auth')->name('certificates');
+Route::get('/certificates/deleted', [CertificateController::class, 'deleted_index'])->middleware('auth')->name('certificates.deleted');
+
 Route::post('/certificate/add', [CertificateController::class, 'add'])->middleware('auth')->name('certificate.add');
 Route::get('/certificate/delete/{id}', [CertificateController::class, 'delete'])->middleware('auth')->name('certificate.delete');
-Route::get('/certificate/view/{id}', [CertificateController::class, 'getInformation'])->middleware('auth')->name('certificate.view');
+Route::get('/certificate/view/{id}', [CertificateController::class, 'get_information'])->middleware('auth')->name('certificate.view');
+Route::get('/certificate/restore/{id}', [CertificateController::class, 'restore'])->middleware('auth')->name('certificate.restore');
 
 Route::get('/certificate/permissions/{id}', [PermissionController::class, 'permission_index'])->middleware(['password.confirm'])->name('permissions');
 Route::post('/certificate/changeOwner/{id}', [PermissionController::class, 'change_owner'])->middleware(['password.confirm'])->name('permissions.changeOwner');

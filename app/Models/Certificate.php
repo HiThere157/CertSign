@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Certificate extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -29,21 +28,21 @@ class Certificate extends Model
 
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'owner_id')->withTrashed();
     }
 
     public function creator()
     {
-        return $this->belongsTo(User::class, 'created_by_id');
+        return $this->belongsTo(User::class, 'created_by_id')->withTrashed();
     }
 
     public function issuer()
     {
-        return $this->belongsTo(Certificate::class, 'issuer_id');
+        return $this->belongsTo(Certificate::class, 'issuer_id')->withTrashed();
     }
 
     public function encryptionKey()
     {
-        return $this->hasOne(EncryptionKey::class, 'certificate_id', 'id');
+        return $this->hasOne(EncryptionKey::class, 'certificate_id', 'id')->withTrashed();
     }
 }

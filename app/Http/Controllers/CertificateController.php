@@ -54,8 +54,17 @@ class CertificateController extends Controller
         return redirect()->route('certificates');
     }
 
+    //GET: index page for deleted certificates
+    public function deleted_index()
+    {
+        Log::info('[CertificateController@deleted_index] User ' . auth()->user()->username . ' accessed the deleted certificates page.');
+        return view('pages.restore', [
+            'certificates' => Certificate::onlyTrashed()->get()
+        ]);
+    }
+
     //GET: get all information about a certificate
-    public function getInformation($id)
+    public function get_information($id)
     {
         $db_certificate = Certificate::find($id);
 
@@ -71,7 +80,7 @@ class CertificateController extends Controller
         
         $certificate_decoded = openssl_x509_parse($certificate);
 
-        Log::info('[CertificateController@getInformation] User ' . auth()->user()->username . ' accessed the certificate information page for certificate ' . $id . '.');
+        Log::info('[CertificateController@get_information] User ' . auth()->user()->username . ' accessed the certificate information page for certificate ' . $id . '.');
         return [
             'certificate' => $db_certificate,
             'decoded' => $certificate_decoded,
@@ -99,6 +108,25 @@ class CertificateController extends Controller
             Log::info('[CertificateController@delete] User ' . auth()->user()->username . ' deleted certificate ' . $id . '.');
             $certificate->encryptionKey->delete();
             $certificate->delete();
+        }
+
+        return redirect()->route('certificates');
+    }
+
+    //GET: restore a soft deleted certificate
+    public function restore($id)
+    {
+        $certificate = Certificate::withTrashed()->find($id);
+        if ($certificate) {
+            if(!Gate::allows('owns-cert', $certificate)) {
+                return redirect()->route('certificates')->withErrors([
+                    'error' => 'No Permission! Contact the owner of this certificate to restore it.'
+                ]);
+            }
+
+            Log::info('[CertificateController@restore] User ' . auth()->user()->username . ' restored certificate ' . $id . '.');
+            $certificate->restore();
+            $certificate->encryptionKey()->restore();
         }
 
         return redirect()->route('certificates');
@@ -139,9 +167,11 @@ class CertificateController extends Controller
         $certificate->owner_id = auth()->user()->id;
         $certificate->valid_from = date("Y-m-d");
         $certificate->valid_to = $request->input('valid_to');
-        $certificate->issuer_id = $issuer->id ?? null;
         $certificate->serial_number = $this->generateNewSerial();
         $certificate->self_signed = $request->input('self_signed') == 'on';
+        $certificate->save();
+
+        $certificate->issuer_id = $issuer->id ?? $certificate->id;
         $certificate->save();
 
         Log::info('[CertificateController@add] User ' . auth()->user()->username . ' created certificate ' . $certificate->id . '.');
