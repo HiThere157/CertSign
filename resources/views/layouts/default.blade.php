@@ -12,7 +12,7 @@
         <script src="{{ asset('js/popper.min.js') }}"></script>
 
     </head>
-    <body>
+    <body style="padding-top: 3.5rem;">
         <x-header />
 
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
