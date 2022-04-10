@@ -15,7 +15,8 @@
             </div>
         </div>
         <table class="table table-striped table-hover tablesorter">
-            <thead>
+            <caption>List of Permissions</caption>
+            <thead class="border-0">
                 <tr>
                     <th>Name</th>
                     <th>Added by</th>

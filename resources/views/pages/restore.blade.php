@@ -5,7 +5,8 @@
         <h1 class="mt-3">Deleted Certificates</h1>
     </div>
     <table class="table table-striped table-hover tablesorter">
-        <thead>
+        <caption>List of Deleted Certificates</caption>
+        <thead class="border-0">
             <tr>
                 <th style="width: 0;">Id</th>
                 <th>Name</th>

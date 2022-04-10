@@ -6,7 +6,8 @@
         <button type="button" name="addModalBtn" class="btn btn-primary" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addCertificateModal" data-bs-selfSigned="true">Add Root Certificate</button>
     </div>
     <table class="table table-striped table-hover tablesorter">
-        <thead>
+        <caption>List of Root Certificates</caption>
+        <thead class="border-0">
             <tr>
                 <th style="width: 0;">Id</th>
                 <th>Name</th>
@@ -59,7 +60,8 @@
         <button type="button" name="addModalBtn" class="btn btn-primary" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addCertificateModal" data-bs-selfSigned="false">Add Certificate</button>
     </div>
     <table class="table table-striped table-hover tablesorter">
-        <thead>
+        <caption>List of Certificates</caption>
+        <thead class="border-0">
             <tr>
                 <th style="width: 0;">Id</th>
                 <th>Name</th>
