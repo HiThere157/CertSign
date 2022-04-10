@@ -67,7 +67,6 @@ class CertificateController extends Controller
     public function get_information($id)
     {
         $db_certificate = Certificate::find($id);
-
         if(!$db_certificate) {
             return ['error' => 'Certificate not found'];
         }

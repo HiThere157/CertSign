@@ -28,7 +28,7 @@
                     </span>
 
                     @can('isAdmin')
-                        <a type="button" class="btn btn-outline-light me-2">Settings</a>
+                        <a href="{{ route('settings') }}" type="button" class="btn btn-outline-light me-2">Settings</a>
                     @endcan
                     <a href="{{ route('logout') }}" type="button" class="btn btn-warning">Logout</a>
                 </div>

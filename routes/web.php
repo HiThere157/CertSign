@@ -23,12 +23,18 @@ Route::get('/', function () {
     return view('pages.home');
 })->name('home');
 
-Route::get('/login', [SessionController::class, 'index'])->name('login');
+Route::get('/login', [SessionController::class, 'login_index'])->name('login');
 Route::post('/login', [SessionController::class, 'login']);
 Route::get('/logout', [SessionController::class, 'logout'])->name('logout');
 
 Route::get('/register', [RegistrationController::class, 'index'])->name('register');
 Route::post('/register', [RegistrationController::class, 'register']);
+
+Route::get('/settings', [SessionController::class, 'settings_index'])->middleware('auth')->name('settings');
+Route::get('/user/disable/{id}', [SessionController::class, 'disable'])->middleware('auth')->name('user.disable');
+Route::get('/user/enable/{id}', [SessionController::class, 'enable'])->middleware('auth')->name('user.enable');
+Route::get('/user/promote/{id}', [SessionController::class, 'promote'])->middleware('auth')->name('user.promote');
+Route::get('/user/demote/{id}', [SessionController::class, 'demote'])->middleware('auth')->name('user.demote');
 
 Route::get('/logs', [LogController::class, 'index'])->middleware('auth')->name('logs');
 

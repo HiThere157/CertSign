@@ -8,11 +8,13 @@ use App\Models\User;
 
 class RegistrationController extends Controller
 {
+    //GET: index page for registration
     public function index()
     {
         return view('pages.auth.register');
     }
 
+    //POST: register a new user
     public function register(Request $request)
     {
         $this->validate($request, [
@@ -26,6 +28,7 @@ class RegistrationController extends Controller
         $user->username = $request->input('username');
         $user->email = $request->input('email');
         $user->password = bcrypt($request->input('password'));
+        $user->is_admin = false;
         $user->save();
 
         auth()->login($user);
