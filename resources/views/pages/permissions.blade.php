@@ -20,10 +20,16 @@
                     <th>Name</th>
                     <th>Added by</th>
                     <th>Added</th>
-                    <th class="sorter-false" style="width: 17rem;">Actions</th>
+                    <th class="sorter-false" style="width: 0;">Actions</th>
                 </tr>
             </thead>
             <tbody>
+                @if(count($user_permissions) == 0)
+                    <tr>
+                        <td colspan="8" class="text-center">No permissions found.</td>
+                    </tr>
+                @endif
+
                 @foreach($user_permissions as $permission)
                     <tr>
                         <td>{{ $permission->user->username }}</td>
@@ -36,10 +42,9 @@
                 @endforeach
             </tbody>
         </table>
-        <hr class="mt-5 mb-5">
     @endif
 
-    <div class="alert alert-danger w-75 mx-auto mt-3 d-flex align-items-center" role="alert">
+    <div class="alert alert-danger w-75 mx-auto mt-5 d-flex align-items-center" role="alert">
         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
         By changing the owner of this certificate, you will lose access to the encryption key and the private key. This action cannot be undone!
     </div>

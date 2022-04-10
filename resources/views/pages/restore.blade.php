@@ -7,17 +7,23 @@
     <table class="table table-striped table-hover tablesorter">
         <thead>
             <tr>
-                <th>Id</th>
+                <th style="width: 0;">Id</th>
                 <th>Name</th>
                 <th>Owner</th>
                 <th>Issuer</th>
                 <th>Valid From</th>
                 <th>Valid To (Days remaining)</th>
                 <th>Serial Number</th>
-                <th class="sorter-false" style="width: 5rem;">Actions</th>
+                <th class="sorter-false" style="width: 0;">Actions</th>
             </tr>
         </thead>
         <tbody>
+            @if(count($certificates) == 0)
+                <tr>
+                    <td colspan="8" class="text-center">No deleted Certificates found.</td>
+                </tr>
+            @endif
+
             @foreach($certificates as $certificate)
                 @can('owns-cert', $certificate)
                     <tr>

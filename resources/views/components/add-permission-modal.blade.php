@@ -11,7 +11,7 @@
                     @csrf
 
                     <div class="mb-3">
-                        <label for="newPermission" class="col-form-label">New Permission:</label>
+                        <label for="newPermission" class="col-form-label">User to add Permission for:</label>
                         <select class="form-select" id="newPermission" name="addUser">
                             <option value="">Select a new user</option>
                             @foreach($all_users as $user)

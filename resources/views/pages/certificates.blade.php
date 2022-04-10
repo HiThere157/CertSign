@@ -8,7 +8,7 @@
     <table class="table table-striped table-hover tablesorter">
         <thead>
             <tr>
-                <th>Id</th>
+                <th style="width: 0;">Id</th>
                 <th>Name</th>
                 <th>Owner</th>
                 <th>Valid From</th>
@@ -18,6 +18,12 @@
             </tr>
         </thead>
         <tbody>
+            @if(count($root_certificates) == 0)
+                <tr>
+                    <td colspan="7" class="text-center">No root certificates found. Mabe create a new one?</td>
+                </tr>
+            @endif
+
             @foreach($root_certificates as $root_certificate)
                 <tr>
                     <td>{{ $root_certificate->id }}</td>
@@ -55,7 +61,7 @@
     <table class="table table-striped table-hover tablesorter">
         <thead>
             <tr>
-                <th>Id</th>
+                <th style="width: 0;">Id</th>
                 <th>Name</th>
                 <th>Owner</th>
                 <th>Issuer</th>
@@ -66,6 +72,12 @@
             </tr>
         </thead>
         <tbody>
+            @if(count($certificates) == 0)
+                <tr>
+                    <td colspan="8" class="text-center">No certificates found. Mabe create a new one?</td>
+                </tr>
+            @endif
+
             @foreach($certificates as $certificate)
                 <tr>
                     <td>{{ $certificate->id }}</td>
