@@ -48,7 +48,7 @@
                             <select class="form-select" id="addIssuer" name="issuer">
                                 <option value="">Select an issuer</option>
                                 @foreach($root_certificates as $root_certificate)
-                                    <option value="{{ $root_certificate->id }}">[0{{ dechex($root_certificate->serial_number) }}] {{ $root_certificate->name }}</option>
+                                    <option value="{{ $root_certificate->id }}">[0x{{ dechex($root_certificate->serial_number) }}] {{ $root_certificate->name }}</option>
                                 @endforeach
                             </select>
                             <div class="form-check">

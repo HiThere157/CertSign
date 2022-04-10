@@ -34,7 +34,7 @@
                     <td>{{ $root_certificate->owner->username }}</td>
                     <td>{{ $root_certificate->valid_from }}</td>
                     <td>{{ $root_certificate->valid_to }} ({{ $root_certificate->daysValid() }} days)</td>
-                    <td>0{{ dechex($root_certificate->serial_number) }}</td>
+                    <td>0x{{ dechex($root_certificate->serial_number) }}</td>
                     <td class="text-end">
                         @can('owns-cert', $root_certificate)
                             <!-- only show transfer, if current user has permission -->
@@ -80,10 +80,10 @@
                         </span>
                     </td>
                     <td>{{ $certificate->owner->username }}</td>
-                    <td>[0{{ dechex($certificate->issuer->serial_number) }}] {{ $certificate->issuer->name }}</td>
+                    <td>[0x{{ dechex($certificate->issuer->serial_number) }}] {{ $certificate->issuer->name }}</td>
                     <td>{{ $certificate->valid_from }}</td>
                     <td>{{ $certificate->valid_to }} ({{ $certificate->daysValid() }} days)</td>
-                    <td>0{{ dechex($certificate->serial_number) }}</td>
+                    <td>0x{{ dechex($certificate->serial_number) }}</td>
                     <td class="text-end">
                         @can('owns-cert', $certificate)
                             <!-- only show transfer and delete, if current user has permission -->
