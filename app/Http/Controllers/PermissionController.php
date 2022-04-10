@@ -18,7 +18,7 @@ class PermissionController extends Controller
     
         $certificate = Certificate::find($id);
         if($certificate && Gate::allows('owns-cert', $certificate)){
-            Log::info('[PermissionController:permission_index] User ' . auth()->user()->username . ' accessed the permission page for certificate ' . $id . '.');
+            Log::info('[PermissionController@permission_index] User ' . auth()->user()->username . ' accessed the permission page for certificate ' . $id . '.');
             return view('pages.permissions', [
                 'id' => $id,
                 'self_signed' => $certificate->self_signed,
@@ -47,7 +47,7 @@ class PermissionController extends Controller
 
             $new_owner = User::find($request->input('newOwner'));
             if($new_owner){
-                Log::info('[PermissionController:change_owner] User ' . auth()->user()->username . ' changed the owner of certificate ' . $id . ' to ' . $new_owner->username . '.');
+                Log::info('[PermissionController@change_owner] User ' . auth()->user()->username . ' changed the owner of certificate ' . $id . ' to ' . $new_owner->username . '.');
                 $certificate->owner_id = $new_owner->id;
                 $certificate->save();
             }
@@ -73,7 +73,7 @@ class PermissionController extends Controller
     
             $user = User::find($request->input('addUser'));
             if($user && Permission::where('certificate_id', $id)->where('user_id', $user->id)->count() == 0){
-                Log::info('[PermissionController:add] User ' . auth()->user()->username . ' added permission for user ' . $user->username . ' to certificate ' . $id . '.');
+                Log::info('[PermissionController@add] User ' . auth()->user()->username . ' added permission for user ' . $user->username . ' to certificate ' . $id . '.');
                 $permission = new Permission();
                 $permission->user_id = $user->id;
                 $permission->added_by_id = auth()->user()->id;
@@ -96,7 +96,7 @@ class PermissionController extends Controller
                 ]);
             }
     
-            Log::info('[PermissionController:delete] User ' . auth()->user()->username . ' deleted permission for user ' . $permission->user->username . ' from certificate ' . $permission->certificate->id . '.');
+            Log::info('[PermissionController@delete] User ' . auth()->user()->username . ' deleted permission for user ' . $permission->user->username . ' from certificate ' . $permission->certificate->id . '.');
             $permission->delete();
         }
     

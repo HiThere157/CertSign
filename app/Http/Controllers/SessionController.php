@@ -22,7 +22,7 @@ class SessionController extends Controller
         ]);
 
         if(Auth::attempt($credentials, $request->has('stayLoggedIn'))) {
-            Log::info('[SessionController:login] User ' . Auth::user()->username . ' logged in.');
+            Log::info('[SessionController@login] User ' . Auth::user()->username . ' logged in.');
             $request->session()->regenerate();
 
             return redirect()->intended();
@@ -35,7 +35,7 @@ class SessionController extends Controller
 
     public function logout()
     {
-        Log::info('[SessionController:logout] User ' . Auth::user()->username . ' logged out.');
+        Log::info('[SessionController@logout] User ' . Auth::user()->username . ' logged out.');
         auth()->logout();
 
         return redirect()->route('login');
@@ -54,7 +54,7 @@ class SessionController extends Controller
             ]);
         }
      
-        Log::info('[SessionController:reauth] User ' . Auth::user()->username . ' reauthenticated.');
+        Log::info('[SessionController@reauth] User ' . Auth::user()->username . ' reauthenticated.');
         $request->session()->passwordConfirmed();
      
         return redirect()->intended();

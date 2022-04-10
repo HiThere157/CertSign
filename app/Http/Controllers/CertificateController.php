@@ -18,7 +18,7 @@ class CertificateController extends Controller
     //GET: index page for certificate management
     public function certificates_index()
     {
-        Log::info('[CertificateController:certificates_index] User ' . auth()->user()->username . ' accessed the certificates page.');
+        Log::info('[CertificateController@certificates_index] User ' . auth()->user()->username . ' accessed the certificates page.');
         return view('pages.certificates', [
             'root_certificates' => Certificate::all()->where('self_signed', true),
             'certificates' => Certificate::all()->where('self_signed', false)
@@ -43,7 +43,7 @@ class CertificateController extends Controller
             $privateKey = openssl_pkey_get_private(Storage::disk('local')->get($storagePath . '/cert.key'), $encryptionKey);
             openssl_pkey_export($privateKey, $privateKeyOut, null, ['config' => storage_path('app/' . $storagePath . '/openssl.cnf')]);
             
-            Log::info('[CertificateController:encryptionKey_index] User ' . auth()->user()->username . ' accessed the encryption key page for certificate ' . $id . '.');
+            Log::info('[CertificateController@encryptionKey_index] User ' . auth()->user()->username . ' accessed the encryption key page for certificate ' . $id . '.');
             return view('pages.encryptionkey', [
                 'encryptionKey' => $encryptionKey,
                 'privateKey' => $privateKeyOut,
@@ -71,7 +71,7 @@ class CertificateController extends Controller
         
         $certificate_decoded = openssl_x509_parse($certificate);
 
-        Log::info('[CertificateController:getInformation] User ' . auth()->user()->username . ' accessed the certificate information page for certificate ' . $id . '.');
+        Log::info('[CertificateController@getInformation] User ' . auth()->user()->username . ' accessed the certificate information page for certificate ' . $id . '.');
         return [
             'certificate' => $db_certificate,
             'decoded' => $certificate_decoded,
@@ -96,7 +96,7 @@ class CertificateController extends Controller
                 ]);
             }
 
-            Log::info('[CertificateController:delete] User ' . auth()->user()->username . ' deleted certificate ' . $id . '.');
+            Log::info('[CertificateController@delete] User ' . auth()->user()->username . ' deleted certificate ' . $id . '.');
             $certificate->encryptionKey->delete();
             $certificate->delete();
         }
@@ -144,7 +144,7 @@ class CertificateController extends Controller
         $certificate->self_signed = $request->input('self_signed') == 'on';
         $certificate->save();
 
-        Log::info('[CertificateController:add] User ' . auth()->user()->username . ' created certificate ' . $certificate->id . '.');
+        Log::info('[CertificateController@add] User ' . auth()->user()->username . ' created certificate ' . $certificate->id . '.');
         $this->generateNewCertificate($certificate, $issuer, $request->input('san'));
 
         return redirect()->route('certificates');
@@ -167,7 +167,7 @@ class CertificateController extends Controller
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randstring = '';
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $randstring .= $characters[rand(0, strlen($characters)-1)];
         }
         return $randstring;

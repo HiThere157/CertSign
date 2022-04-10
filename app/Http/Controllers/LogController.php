@@ -53,7 +53,7 @@ class LogController extends Controller
                     $message = implode("] ", array_slice($description, 1));
 
                     //if no controller is found, undo split
-                    if(!preg_match('/\[\w+:\w+\]/', $controller) == 1){
+                    if(!preg_match('/\[\w+@\w+\]/', $controller) == 1){
                         $message = $controller . " " . $message;
                         $controller = "N/A";
                     }
@@ -70,7 +70,7 @@ class LogController extends Controller
 
         $pageinator = $this->paginate(array_reverse($logs), $n)->withQueryString()->withPath('/logs');
 
-        Log::info('[LogController:index] User ' . auth()->user()->username . ' accessed the log page.');
+        Log::info('[LogController@index] User ' . auth()->user()->username . ' accessed the log page.');
         return view('pages.logs', [
             'logs' => $pageinator,
             'type' => $type,

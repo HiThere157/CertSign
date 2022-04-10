@@ -21,7 +21,7 @@ class RegistrationController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        Log::info('[RegistrationController:register] User ' . $request->input('username') . ' registered.');
+        Log::info('[RegistrationController@register] User ' . $request->input('username') . ' registered.');
         $user = new User;
         $user->username = $request->input('username');
         $user->email = $request->input('email');
