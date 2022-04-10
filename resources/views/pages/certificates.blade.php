@@ -180,6 +180,7 @@
 
             $('[name="viewSecrets"]').prop('href', '');
 
+            // ^reset all values
             var response = await fetch("{{ route('certificate.view', ':id')}}".replace(':id', id));
             var certificateInfo = await response.json();
 
@@ -244,6 +245,15 @@
                         '</div>'
                     );
                     sanInput.val('');
+                }
+            });
+
+            //preventDefault on addSanInput
+            $('#addSanInput').keypress(function(e) {
+                if(e.keyCode  == 13) {
+                    e.preventDefault();
+                    $('#addSanBtn').click();
+                    return false;
                 }
             });
 
