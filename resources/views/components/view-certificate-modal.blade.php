@@ -83,7 +83,7 @@
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="viewFileCertificate" role="tabpanel"></div>
                         <div class="tab-pane fade" id="viewFileKey" role="tabpanel">
-                            <a href="" name="viewEncryptionKey" class="btn btn-warning d-block mx-auto mt-2" style="width: fit-content;">Encryption Password / Private Key</a>
+                            <a href="" name="viewSecrets" class="btn btn-warning d-block mx-auto mt-2" style="width: fit-content;">Encryption Password / Private Key</a>
                         </div>
                         <div class="tab-pane fade" id="viewFileCsr" role="tabpanel"></div>
                         <div class="tab-pane fade" id="viewFileConfig" role="tabpanel"></div>
@@ -92,7 +92,7 @@
                                 <span class="d-block mt-2">Download Certificate and Encrypted Private Key:</span>
                                 <div class="d-flex">
                                     <button class="btn btn-primary me-1" id="viewDownloadFiles">Download</button>
-                                    <a href="" name="viewEncryptionKey" class="btn btn-warning ms-1">Encryption Password / Private Key</a>
+                                    <a href="" name="viewSecrets" class="btn btn-warning ms-1">Encryption Password / Private Key</a>
                                 </div>
                             </div>
                         </div>

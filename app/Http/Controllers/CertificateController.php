@@ -26,7 +26,7 @@ class CertificateController extends Controller
     }
 
     //GET: index page for viewing a encryption key or private key
-    public function encryptionKey_index($id)
+    public function secrets_index($id)
     {
         $certificate = Certificate::find($id);
         
@@ -43,8 +43,8 @@ class CertificateController extends Controller
             $privateKey = openssl_pkey_get_private(Storage::disk('local')->get($storagePath . '/cert.key'), $encryptionKey);
             openssl_pkey_export($privateKey, $privateKeyOut, null, ['config' => storage_path('app/' . $storagePath . '/openssl.cnf')]);
             
-            Log::info('[CertificateController@encryptionKey_index] User ' . auth()->user()->username . ' accessed the encryption key page for certificate ' . $id . '.');
-            return view('pages.encryptionkey', [
+            Log::info('[CertificateController@secrets_index] User ' . auth()->user()->username . ' accessed the encryption key page for certificate ' . $id . '.');
+            return view('pages.secrets', [
                 'encryptionKey' => $encryptionKey,
                 'privateKey' => $privateKeyOut,
                 'certificateId' => $certificate->id

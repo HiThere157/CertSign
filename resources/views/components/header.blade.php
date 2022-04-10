@@ -8,16 +8,16 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ route('home') }}">Overview</a>
+                    <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('home') }}">Overview</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('certificates') ? 'active' : '' }}" href="{{ route('certificates') }}">Certificates</a>
+                    <a class="nav-link {{ request()->is('certificates') ? 'active' : '' }}" href="{{ route('certificates') }}">Certificates</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('certificates.deleted') ? 'active' : '' }}" href="{{ route('certificates.deleted') }}">Restore</a>
+                    <a class="nav-link {{ request()->is('certificates/deleted') ? 'active' : '' }}" href="{{ route('certificates.deleted') }}">Restore</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('logs') ? 'active' : '' }}" href="{{ route('logs') }}">Logs</a>
+                    <a class="nav-link {{ request()->is('logs') ? 'active' : '' }}" href="{{ route('logs') }}">Logs</a>
                 </li>
 
             </ul>
@@ -28,7 +28,7 @@
                     </span>
 
                     @can('isAdmin')
-                        <a href="{{ route('settings') }}" type="button" class="btn btn-outline-light me-2">Settings</a>
+                        <a href="{{ route('settings') }}" type="button" class="btn me-2 {{ request()->is('settings') ? 'btn-light' : 'btn-outline-light' }}">Settings</a>
                     @endcan
                     <a href="{{ route('logout') }}" type="button" class="btn btn-warning">Logout</a>
                 </div>

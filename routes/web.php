@@ -54,4 +54,4 @@ Route::post('/certificate/changeOwner/{id}', [PermissionController::class, 'chan
 Route::post('/certificate/addPermission/{id}', [PermissionController::class, 'add'])->middleware(['password.confirm'])->name('permissions.add');
 Route::get('/certificate/deletePermission/{id}', [PermissionController::class, 'delete'])->middleware(['password.confirm'])->name('permissions.delete');
 
-Route::get('/encryptionkey/view/{id}', [CertificateController::class, 'encryptionKey_index'])->middleware(['password.confirm'])->name('encryptionkey.view.index');
+Route::get('/secrets/view/{id}', [CertificateController::class, 'secrets_index'])->middleware(['password.confirm'])->name('secrets');

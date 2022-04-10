@@ -164,7 +164,7 @@
             $('#viewFileCsr').find('textarea').remove();
             $('#viewFileConfig').find('textarea').remove();
 
-            $('[name="viewEncryptionKey"]').prop('href', '');
+            $('[name="viewSecrets"]').prop('href', '');
 
             var response = await fetch("{{ route('certificate.view', ':id')}}".replace(':id', id));
             var certificateInfo = await response.json();
@@ -200,7 +200,7 @@
             $(textareaHTML).text(certificateInfo.files.csr).appendTo('#viewFileCsr');
             $(textareaHTML).text(certificateInfo.files.cnf).appendTo('#viewFileConfig');
 
-            $('[name="viewEncryptionKey"]').prop('href', "{{ route('encryptionkey.view.index', ':id')}}".replace(':id', id));
+            $('[name="viewSecrets"]').prop('href', "{{ route('secrets', ':id')}}".replace(':id', id));
         }
 
         $(document).ready(function() {
