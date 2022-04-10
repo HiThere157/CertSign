@@ -15,7 +15,9 @@
                         <select class="form-select" id="newPermission" name="addUser">
                             <option value="">Select a new user</option>
                             @foreach($all_users as $user)
-                                <option value="{{ $user->id }}">{{ $user->username }}</option>
+                                @if($user->id != Auth::user()->id)
+                                    <option value="{{ $user->id }}">{{ $user->username }}</option>
+                                @endif
                             @endforeach
                         </select>
                     </div>

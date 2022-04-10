@@ -72,7 +72,7 @@ class PermissionController extends Controller
             }
     
             $user = User::find($request->input('addUser'));
-            if($user && Permission::where('certificate_id', $id)->where('user_id', $user->id)->count() == 0){
+            if($user && Permission::where('certificate_id', $id)->where('user_id', $user->id)->count() == 0 && $user->id != $certificate->owner_id){
                 Log::info('[PermissionController@add] User ' . auth()->user()->username . ' added permission for user ' . $user->username . ' to certificate ' . $id . '.');
                 $permission = new Permission();
                 $permission->user_id = $user->id;
