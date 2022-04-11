@@ -29,6 +29,7 @@ class RegistrationController extends Controller
         $user->email = $request->input('email');
         $user->password = bcrypt($request->input('password'));
         $user->is_admin = false;
+        $user->can_sign = false;
         $user->save();
 
         auth()->login($user);

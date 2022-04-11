@@ -30,6 +30,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->is_admin == true;
         });
 
+        Gate::define('can-sign', function($user) {
+            return $user->can_sign == true || Gate::allows('isAdmin');
+        });
+
         Gate::define('owns-cert', function($user, $certificate) {
             return $user->id == $certificate->owner_id || Gate::allows('isAdmin');
         });

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\SettingsController;
 
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\PermissionController;
@@ -30,16 +31,18 @@ Route::get('/logout', [SessionController::class, 'logout'])->name('logout');
 Route::get('/register', [RegistrationController::class, 'index'])->name('register');
 Route::post('/register', [RegistrationController::class, 'register']);
 
-Route::get('/settings', [SessionController::class, 'settings_index'])->middleware('auth')->name('settings');
-Route::get('/user/disable/{id}', [SessionController::class, 'disable'])->middleware('auth')->name('user.disable');
-Route::get('/user/enable/{id}', [SessionController::class, 'enable'])->middleware('auth')->name('user.enable');
-Route::get('/user/promote/{id}', [SessionController::class, 'promote'])->middleware('auth')->name('user.promote');
-Route::get('/user/demote/{id}', [SessionController::class, 'demote'])->middleware('auth')->name('user.demote');
-
-Route::get('/logs', [LogController::class, 'index'])->middleware('auth')->name('logs');
-
 Route::get('/confirm-password', [SessionController::class, 'reauth_index'])->middleware('auth')->name('password.confirm');
 Route::post('/confirm-password', [SessionController::class, 'reauth'])->middleware(['auth', 'throttle:6,1']);
+
+Route::get('/settings', [SettingsController::class, 'index'])->middleware('auth')->name('settings');
+Route::get('/user/disable/{id}', [SettingsController::class, 'disable'])->middleware('auth')->name('user.disable');
+Route::get('/user/enable/{id}', [SettingsController::class, 'enable'])->middleware('auth')->name('user.enable');
+Route::get('/user/promote/{id}', [SettingsController::class, 'promote'])->middleware('auth')->name('user.promote');
+Route::get('/user/demote/{id}', [SettingsController::class, 'demote'])->middleware('auth')->name('user.demote');
+Route::get('/user/set_signer/{id}', [SettingsController::class, 'set_signer'])->middleware('auth')->name('user.set_signer');
+Route::get('/user/revoke_signer/{id}', [SettingsController::class, 'revoke_signer'])->middleware('auth')->name('user.revoke_signer');
+
+Route::get('/logs', [LogController::class, 'index'])->middleware('auth')->name('logs');
 
 Route::get('/certificates', [CertificateController::class, 'certificates_index'])->middleware('auth')->name('certificates');
 Route::get('/certificates/deleted', [CertificateController::class, 'deleted_index'])->middleware('auth')->name('certificates.deleted');

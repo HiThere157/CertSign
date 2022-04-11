@@ -26,7 +26,7 @@
             @endif
 
             @foreach($root_certificates as $root_certificate)
-                <tr>
+                <tr @class(['table-primary' => Gate::allows('has-permission', $root_certificate)])>
                     <td>{{ $root_certificate->id }}</td>
                     <td>
                         <span>{{ $root_certificate->name }}</span>

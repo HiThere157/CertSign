@@ -145,6 +145,12 @@ class CertificateController extends Controller
             ]);
         }
 
+        if(!Gate::allows('can-sign')) {
+            return redirect()->route('certificates')->withErrors([
+                'error' => 'No Permission! Your account does not have permission to create new Certificates. Contact the administrator to get permission.'
+            ]);
+        }
+
         $issuer = Certificate::find($request->input('issuer'));
         if($issuer) {
             if(!Gate::allows('has-permission', $issuer)) {

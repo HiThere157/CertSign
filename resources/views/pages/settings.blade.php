@@ -12,12 +12,12 @@
                 <th>Email</th>
                 <th>Created At</th>
                 <th>Disabled At</th>
-                <th class="sorter-false" style="width: 13rem;">Actions</th>
+                <th class="sorter-false" style="width: 23rem;">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach($users as $user)
-                <tr @class(['table-success' => Auth::user()->id == $user->id])>
+                <tr @class(['table-primary' => Auth::user()->id == $user->id])>
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->username }}</td>
                     <td>{{ $user->email }}</td>
@@ -26,7 +26,12 @@
                     <td class="text-end">
                         @if(Auth::user()->id != $user->id)
                             @if($user->deleted_at == null)
-                                <a class="btn btn-secondary" href="{{ route('user.disable', $user->id) }}">Disable</a>
+                            
+                                @if($user->can_sign == false)
+                                    <a class="btn btn-warning" href="{{ route('user.set_signer', $user->id) }}">Set as Signer</a>
+                                @else
+                                    <a class="btn btn-warning" href="{{ route('user.revoke_signer', $user->id) }}">Remove as Signer</a>
+                                @endif
 
                                 @if($user->is_admin == false)
                                     <a class="btn btn-danger" href="{{ route('user.promote', $user->id) }}">Make Admin</a>
@@ -34,6 +39,7 @@
                                     <a class="btn btn-danger" href="{{ route('user.demote', $user->id) }}">Demote</a>
                                 @endif
                                 
+                                <a class="btn btn-secondary" href="{{ route('user.disable', $user->id) }}">Disable</a>
                             @else
                                 <a class="btn btn-primary" href="{{ route('user.enable', $user->id) }}">Enable</a>
                             @endif

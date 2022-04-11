@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('password');
             $table->boolean('is_admin');
+            $table->boolean('can_sign');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
