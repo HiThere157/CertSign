@@ -8,9 +8,8 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center mx-5 mt-3">
-            <h1>Manage Additional Permissions (Id: {{ $id }})</h1>
+            <h1>Manage Additional Permissions <span class="text-nowrap">(Id: {{ $id }})</span></h1>
             <div>
-                <a href="{{ route('certificates') }}" class="btn btn-secondary me-1" style="width: 15rem;">Back</a>
                 <button id="addPermissionBtn" type="button" class="btn btn-primary ms-1" style="width: 15rem;" data-bs-toggle="modal" data-bs-target="#addPermissionModal">Add User Permission</button>
             </div>
         </div>
@@ -51,7 +50,7 @@
     </div>
 
     <div class="rounded shadow m-auto w-50 p-4 mt-3">
-        <h1>Change Certificate Owner (Id: {{ $id }})</h1>
+        <h1>Change Certificate Owner <span class="text-nowrap">(Id: {{ $id }})</span></h1>
 
         <form id="changeOwnerForm" class="mb-3 mt-3" action="{{ route('permissions.changeOwner', $id) }}" method="post">
             @csrf
