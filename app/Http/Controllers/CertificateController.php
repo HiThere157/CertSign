@@ -83,6 +83,7 @@ class CertificateController extends Controller
         return [
             'certificate' => $db_certificate,
             'decoded' => $certificate_decoded,
+            'owner' => User::find($db_certificate->owner_id)->username,
             'issuer' => Certificate::find($db_certificate->issuer_id ?? $db_certificate->id),
             'files' => [
                 'certificate' => $certificate,

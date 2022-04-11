@@ -157,7 +157,7 @@
 
         async function updateViewModal (id){
             $('#viewName').val('');
-            $('#viewCreated_by').val('');
+            $('#viewOwner').val('');
             $('#viewValid_from').val('');
             $('#viewValid_to').val('');
 
@@ -186,7 +186,7 @@
 
             $('#viewCertificateModalLabel').text((certificateInfo.certificate.self_signed ? 'View Root Certificate' : 'View Certificate') + " (Id: " + certificateInfo.certificate.id + ")");
             $('#viewName').val(certificateInfo.certificate.name);
-            $('#viewCreated_by').val(certificateInfo.decoded.subject.OU);
+            $('#viewOwner').val(certificateInfo.owner);
             $('#viewValid_from').val(certificateInfo.certificate.valid_from);
             $('#viewValid_to').val(certificateInfo.certificate.valid_to);
 

@@ -15,8 +15,8 @@
                             <input type="text" class="form-control" id="viewName" spellcheck="false" readonly />
                         </div>
                         <div class="flex-grow-1">
-                            <label for="viewCreated_by" class="col-form-label">Created by:</label>
-                            <input type="text" class="form-control" id="viewCreated_by" readonly />
+                            <label for="viewOwner" class="col-form-label">Owner:</label>
+                            <input type="text" class="form-control" id="viewOwner" readonly />
                         </div>
                         <div class="flex-grow-1">
                             <label for="viewValid_from" class="col-form-label">Valid From:</label>
