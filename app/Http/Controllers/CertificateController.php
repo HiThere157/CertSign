@@ -47,7 +47,7 @@ class CertificateController extends Controller
             return view('pages.secrets', [
                 'encryptionKey' => $encryptionKey,
                 'privateKey' => $privateKeyOut,
-                'certificateId' => $certificate->id
+                'id' => $certificate->id
             ]);
         }
 

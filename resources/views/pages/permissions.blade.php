@@ -2,7 +2,7 @@
 
 @section('content')
     @if($self_signed)
-        <div class="alert alert-warning w-75 mx-auto mt-4 d-flex align-items-center" role="alert">
+        <div class="alert alert-warning w-75 mx-auto mt-4 d-flex align-items-center" role="alert" style="min-width: 30rem;">
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
             User with Permission are able to use this Certificate as an issuer for other certificates.
         </div>
@@ -44,12 +44,12 @@
         </table>
     @endif
 
-    <div class="alert alert-danger w-75 mx-auto mt-5 d-flex align-items-center" role="alert">
+    <div class="alert alert-danger w-75 mx-auto mt-5 d-flex align-items-center" role="alert" style="min-width: 30rem;">
         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
         By changing the owner of this certificate, you will lose access to the encryption key and the private key. This action cannot be undone!
     </div>
 
-    <div class="rounded shadow m-auto w-50 p-4 mt-3">
+    <div class="rounded shadow m-auto w-50 p-4 mt-3" style="min-width: 30rem;">
         <h1>Change Certificate Owner <span class="text-nowrap">(Id: {{ $id }})</span></h1>
 
         <form id="changeOwnerForm" class="mb-3 mt-3" action="{{ route('permissions.changeOwner', $id) }}" method="post">

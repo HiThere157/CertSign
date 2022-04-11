@@ -1,13 +1,13 @@
 @extends('layouts.default')
 
 @section('content')
-    <div class="alert alert-warning w-50 mx-auto mt-4 d-flex align-items-center" role="alert">
+    <div class="alert alert-warning w-50 mx-auto mt-4 d-flex align-items-center" role="alert" style="min-width: 30rem;">
         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>
         Do not share your encryption key or the private key with anyone!
     </div>
 
-    <div class="rounded shadow m-auto w-25 p-4 mt-3">
-        <h1>Encryption Key (Id: {{ $certificateId }})</h1>
+    <div class="rounded shadow m-auto w-25 p-4 mt-3" style="min-width: 30rem;">
+        <h1>Encryption Key <span class="text-nowrap">(Id: {{ $id }})</h1>
 
         <div class="input-group mb-3 mt-4">
             <input id="encryptionKey" type="password" class="form-control" value="{{ $encryptionKey }}" readonly>
@@ -20,8 +20,8 @@
         </div>
     </div>
 
-    <div class="rounded shadow m-auto w-25 p-4 mt-3">
-        <h1>Private Key (Id: {{ $certificateId }})</h1>
+    <div class="rounded shadow m-auto w-25 p-4 mt-3" style="min-width: 30rem;">
+        <h1>Private Key <span class="text-nowrap">(Id: {{ $id }})</h1>
 
         <textarea id="privateKey" readonly hidden>{{ $privateKey }}</textarea>
 

@@ -27,7 +27,7 @@
                         Hi, {{ Auth::user()->username }}!
                     </span>
 
-                    @can('isAdmin')
+                    @can('is-admin')
                         <a href="{{ route('settings') }}" type="button" class="btn me-2 {{ request()->is('settings') ? 'btn-light' : 'btn-outline-light' }}">Settings</a>
                     @endcan
                     <a href="{{ route('logout') }}" type="button" class="btn btn-warning">Logout</a>

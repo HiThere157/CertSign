@@ -13,7 +13,7 @@ class SettingsController extends Controller
     //GET: index page of settings
     public function index()
     {
-        if(Gate::allows('isAdmin')) {
+        if(Gate::allows('is-admin')) {
             Log::info('[SettingsController@index_settings] User ' . Auth::user()->username . ' opended settings.');
             return view('pages.settings', ['users' => User::withTrashed()->get()]);
         }
@@ -30,7 +30,7 @@ class SettingsController extends Controller
             ]);
         }
 
-        if(Gate::allows('isAdmin')) {
+        if(Gate::allows('is-admin')) {
             $user = User::find($id);
             if($user){
                 Log::info('[SettingsController@disable] User ' . Auth::user()->username . ' disabled user ' . $user->username . '.');
@@ -48,7 +48,7 @@ class SettingsController extends Controller
     //GET: enable a user
     public function enable($id)
     {
-        if(Gate::allows('isAdmin')) {
+        if(Gate::allows('is-admin')) {
             $user = User::withTrashed()->find($id);
             if($user){
                 Log::info('[SettingsController@enable] User ' . Auth::user()->username . ' enabled user ' . $user->username . '.');
@@ -66,7 +66,7 @@ class SettingsController extends Controller
     //GET: promote a user to admin
     public function promote($id)
     {
-        if(Gate::allows('isAdmin')) {
+        if(Gate::allows('is-admin')) {
             $user = User::find($id);
             if($user){
                 Log::info('[SettingsController@promote] User ' . Auth::user()->username . ' promoted user ' . $user->username . ' to admin.');
@@ -86,7 +86,7 @@ class SettingsController extends Controller
     //GET: demote a user from admin
     public function demote($id)
     {
-        if(Gate::allows('isAdmin')) {
+        if(Gate::allows('is-admin')) {
             $user = User::find($id);
             if($user){
                 Log::info('[SettingsController@demote] User ' . Auth::user()->username . ' demoted user ' . $user->username . ' from admin.');
@@ -105,7 +105,7 @@ class SettingsController extends Controller
     //GET: give a user the ability to sign
     public function set_signer($id)
     {
-        if(Gate::allows('isAdmin')) {
+        if(Gate::allows('is-admin')) {
             $user = User::find($id);
             if($user){
                 Log::info('[SettingsController@set_signer] User ' . Auth::user()->username . ' gave user ' . $user->username . ' the ability to sign.');
@@ -124,7 +124,7 @@ class SettingsController extends Controller
     //GET: revoke a user's ability to sign
     public function revoke_signer($id)
     {
-        if(Gate::allows('isAdmin')) {
+        if(Gate::allows('is-admin')) {
             $user = User::find($id);
             if($user){
                 Log::info('[SettingsController@revoke_signer] User ' . Auth::user()->username . ' revoked user ' . $user->username . '\'s ability to sign.');

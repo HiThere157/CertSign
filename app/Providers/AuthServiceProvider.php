@@ -26,16 +26,16 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('isAdmin', function($user) {
+        Gate::define('is-admin', function($user) {
             return $user->is_admin == true;
         });
 
         Gate::define('can-sign', function($user) {
-            return $user->can_sign == true || Gate::allows('isAdmin');
+            return $user->can_sign == true || Gate::allows('is-admin');
         });
 
         Gate::define('owns-cert', function($user, $certificate) {
-            return $user->id == $certificate->owner_id || Gate::allows('isAdmin');
+            return $user->id == $certificate->owner_id || Gate::allows('is-admin');
         });
 
         Gate::define('has-permission', function($user, $certificate) {
