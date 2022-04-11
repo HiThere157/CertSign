@@ -23,7 +23,8 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
-        'can_sign'
+        'can_sign',
+        'last_login_at',
     ];
 
     /**

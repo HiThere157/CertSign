@@ -34,6 +34,10 @@ class SessionController extends Controller
             Log::info('[SessionController@login] User ' . Auth::user()->username . ' logged in.');
             $request->session()->regenerate();
 
+            $user = User::find(Auth::user()->id);
+            $user->last_login_at = now();
+            $user->save();
+
             return redirect()->intended();
         } 
 

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('is_admin');
             $table->boolean('can_sign');
             $table->rememberToken();
+            $table->datetime('last_login_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

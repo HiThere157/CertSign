@@ -10,6 +10,7 @@
                 <th>Id</th>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Last Login</th>
                 <th>Created At</th>
                 <th>Disabled At</th>
                 <th class="sorter-false" style="width: 23rem;">Actions</th>
@@ -21,6 +22,7 @@
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->username }}</td>
                     <td>{{ $user->email }}</td>
+                    <td>{{ $user->last_login_at }}</td>
                     <td>{{ $user->created_at }}</td>
                     <td>{{ $user->deleted_at }}</td>
                     <td class="text-end">
