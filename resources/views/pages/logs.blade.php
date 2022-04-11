@@ -6,7 +6,7 @@
     </div>
 
     <form action="{{ route('logs') }}">
-        <div class="d-flex flex-wrap mb-3" style="column-gap: 1rem;">
+        <div class="d-flex flex-wrap mb-3 justify-content-center" style="column-gap: 1rem;">
             <div class="flex-grow-1">
 
                 <div class="input-group mb-3">
@@ -44,21 +44,19 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="d-flex align-items-center" style="height: fit-content; column-gap: 1rem;">
                 <div class="d-flex">
                     <label for="search_start" class="col-form-label text-nowrap">Search Start:</label>
                     <input type="date" class="ms-2 form-control" id="search_start" name="start_time" />
                 </div>
-            </div>
-            <div>
                 <div class="d-flex">
                     <label for="search_end" class="col-form-label text-nowrap">Search End:</label>
                     <input type="date" class="ms-2 form-control" id="search_end" name="end_time" />
                 </div>
-            </div>
-            <div>
-                <button id="resetBtn" type="button" style="width: 10rem;" class="btn btn-secondary">Reset</button>
-                <button id="submitBtn type="submit" style="width: 10rem;" class="btn btn-primary">Search</button>
+                <div>
+                    <button id="resetBtn" type="button" style="width: 10rem;" class="btn btn-secondary">Reset</button>
+                    <button id="submitBtn" type="submit" style="width: 10rem;" class="btn btn-primary">Search</button>
+                </div>
             </div>
         </div>
     </form>
