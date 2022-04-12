@@ -366,11 +366,7 @@
 
             //listener for download button
             $('#viewDownloadFiles').click(function() {
-                var certificate = $('#viewFileCertificate').find('textarea').val();
-                var key = $('#viewFileKey').find('textarea').val();
-
-                download(certificate, 'certificate.cer');
-                download(key, 'encrypted_private_key.key');
+                download($('#viewFileCertificate').find('textarea').val(), 'certificate.cer');
             });
 
             //set confirm button to correct route

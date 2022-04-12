@@ -89,7 +89,7 @@
                         <div class="tab-pane fade" id="viewFileConfig" role="tabpanel"></div>
                         <div class="tab-pane fade" id="viewFileDownload" role="tabpanel">
                             <div class="d-flex flex-column align-items-center">
-                                <span class="d-block mt-2">Download Certificate and Encrypted Private Key:</span>
+                                <span class="d-block mt-2">Download Certificate</span>
                                 <div class="d-flex">
                                     <button class="btn btn-primary me-1" id="viewDownloadFiles">Download</button>
                                     <a href="" name="viewSecrets" class="btn btn-warning ms-1">Encryption Password / Private Key</a>
