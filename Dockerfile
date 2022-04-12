@@ -10,20 +10,26 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
-COPY config/apache2.conf /etc/apache2/apache2.conf
-COPY config/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
-COPY config/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY config/conf-available/ssl-params.conf /etc/apache2/conf-available/ssl-params.conf
+COPY apache/config/apache2.conf /etc/apache2/apache2.conf
+COPY apache/config/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+COPY apache/config/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY apache/config/conf-available/ssl-params.conf /etc/apache2/conf-available/ssl-params.conf
 RUN a2enmod rewrite
 RUN a2enmod ssl
 RUN a2enmod headers
 RUN a2ensite default-ssl
 
+COPY web/.env /app/Certsign/.env
 RUN chmod -R 777 /app/Certsign
+
+RUN composer install
 
 RUN php artisan optimize:clear
 RUN php artisan key:generate
