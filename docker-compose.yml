@@ -1,13 +1,14 @@
 version: "3.9"
 services:
   web:
-    build: .
+    build: docker/
     restart: on-failure:5
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ../:/app/CertSign
+      - ./:/app/CertSign
+      - ./docker/apache/certs:/etc/apache2/certs
 
   db:
     image: mysql
@@ -17,4 +18,4 @@ services:
     ports:
       - "3300:3306"
     volumes:
-      - ./db/data:/var/lib/mysql
+      - ./docker/db/data:/var/lib/mysql
