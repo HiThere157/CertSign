@@ -5,6 +5,7 @@ services:
     restart: on-failure:5
     ports:
       - 8001:80
+      - 44301:443
     volumes:
       - ./:/app/CertSign
 
