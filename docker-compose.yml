@@ -4,8 +4,8 @@ services:
     build: docker/
     restart: on-failure:5
     ports:
-      - "80:80"
-      - "443:443"
+      - 8001:80
+      - 44301:443
     volumes:
       - ./:/app/CertSign
 
