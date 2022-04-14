@@ -20,6 +20,13 @@ use App\Http\Controllers\LogController;
 |
 */
 
+$app_url = env('APP_URL');
+if(!empty($app_url)){
+    URL::forceRootUrl($app_url);
+    $schema = explode(':', $app_url)[0];
+    URL::forceScheme($schema);
+}
+
 Route::get('/', function () {
     return view('pages.home');
 })->name('home');
