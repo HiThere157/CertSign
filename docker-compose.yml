@@ -14,7 +14,6 @@ services:
     restart: on-failure:5
     environment:
       MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "certsign"
     ports:
       - "3300:3306"
     volumes:
