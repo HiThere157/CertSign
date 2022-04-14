@@ -8,7 +8,6 @@ services:
       - "443:443"
     volumes:
       - ./:/app/CertSign
-      - ./docker/apache/certs:/etc/apache2/certs
 
   db:
     image: mysql
