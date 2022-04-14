@@ -24,6 +24,9 @@ COPY apache/sites-available/000-default.conf /etc/apache2/sites-available/000-de
 COPY apache/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 COPY apache/conf-available/ssl-params.conf /etc/apache2/conf-available/ssl-params.conf
 
+COPY apache/certs/certsign.cer /etc/ssl/certs/certsign.cer
+COPY apache/certs/certsign.key /etc/ssl/certs/certsign.key
+
 # Enable Apache modules, sites and configs
 RUN a2enmod ssl rewrite headers && a2ensite default-ssl && a2enconf ssl-params
 
