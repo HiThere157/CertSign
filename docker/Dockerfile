@@ -30,5 +30,8 @@ COPY apache/certs/certsign.key /etc/ssl/certs/certsign.key
 # Enable Apache modules, sites and configs
 RUN a2enmod ssl rewrite headers && a2ensite default-ssl && a2enconf ssl-params
 
+# Give permission to App Folder
+RUN chmod -R 777 /app
+
 EXPOSE 80
 CMD ["apachectl", "-D",  "FOREGROUND"]
