@@ -15,7 +15,5 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: "certsign"
-    ports:
-      - "3300:3306"
     volumes:
       - ./docker/db/data:/var/lib/mysql
