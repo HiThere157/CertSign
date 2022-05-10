@@ -25,7 +25,8 @@ COPY apache/sites-available/000-default.conf /etc/apache2/sites-available/000-de
 #COPY apache/conf-available/ssl-params.conf /etc/apache2/conf-available/ssl-params.conf
 
 # Enable Apache modules, sites and configs
-RUN a2enmod rewrite headers ssl && a2ensite default-ssl && a2enconf ssl-params
+RUN a2enmod rewrite headers ssl
+#RUN a2ensite default-ssl && a2enconf ssl-params
 
 # Give permission to App Folder
 RUN chmod -R 777 /app
