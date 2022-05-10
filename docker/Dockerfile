@@ -21,14 +21,15 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Copy apache config files
 COPY apache/apache2.conf /etc/apache2/apache2.conf
 COPY apache/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY apache/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
-COPY apache/conf-available/ssl-params.conf /etc/apache2/conf-available/ssl-params.conf
+#COPY apache/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+#COPY apache/conf-available/ssl-params.conf /etc/apache2/conf-available/ssl-params.conf
 
-COPY apache/certs/certsign.cer /etc/ssl/certs/certsign.cer
-COPY apache/certs/certsign.key /etc/ssl/certs/certsign.key
+#COPY apache/certs/certsign.cer /etc/ssl/certs/certsign.cer
+#COPY apache/certs/certsign.key /etc/ssl/certs/certsign.key
 
 # Enable Apache modules, sites and configs
-RUN a2enmod ssl rewrite headers && a2ensite default-ssl && a2enconf ssl-params
+#RUN a2enmod ssl && a2ensite default-ssl && a2enconf ssl-params
+RUN a2enmod rewrite headers
 
 # Give permission to App Folder
 RUN chmod -R 777 /app
