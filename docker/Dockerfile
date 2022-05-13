@@ -31,5 +31,4 @@ RUN a2enmod rewrite headers ssl
 # Give permission to App Folder
 RUN chmod -R 777 /app
 
-EXPOSE 80
 CMD ["apachectl", "-D",  "FOREGROUND"]
