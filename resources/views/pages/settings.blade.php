@@ -7,7 +7,7 @@
     <table class="table table-striped table-hover tablesorter">
         <thead>
             <tr>
-                <th>Id</th>
+                <th style="width: 0;">Id</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>Last Login</th>
