@@ -10,6 +10,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class LogController extends Controller
 {
+    //GET: ingex page for the logs
     public function index(Request $request)
     {
         $type = $request->input('type');
@@ -81,7 +82,7 @@ class LogController extends Controller
         ]);
     }
 
-    public function paginate($items, $perPage, $page = null)
+    private function paginate($items, $perPage, $page = null)
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
