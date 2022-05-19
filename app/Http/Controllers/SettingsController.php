@@ -15,7 +15,7 @@ class SettingsController extends Controller
     {
         if(Gate::allows('is-admin')) {
             Log::info('[SettingsController@index_settings] User ' . Auth::user()->username . ' opended settings.');
-            return view('pages.settings', ['users' => User::withTrashed()->get()]);
+            return view('pages.auth.settings', ['users' => User::withTrashed()->get()]);
         }
        
         return redirect()->route('home');
@@ -71,7 +71,6 @@ class SettingsController extends Controller
             if($user){
                 Log::info('[SettingsController@promote] User ' . Auth::user()->username . ' promoted user ' . $user->username . ' to admin.');
                 $user->is_admin = true;
-                $user->can_sign = true;
                 $user->save();
             }
 
