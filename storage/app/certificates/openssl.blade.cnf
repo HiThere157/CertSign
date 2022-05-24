@@ -1,15 +1,14 @@
 [ req ]
+prompt = no
 distinguished_name = req_distinguished_name
-@if(count($subjects) > 0)
 req_extensions = v3_req
-@endif
 
 [ req_distinguished_name ]
 commonName = "{{ $commonName }}"
 organizationalUnitName = "{{ $created_by }}"
-basicConstraints = CA:{{ $ca }}
 
 [ v3_req ]
+basicConstraints = CA:{{ $ca }}
 @if(count($subjects) > 0)
 subjectAltName = @san
 @endif
