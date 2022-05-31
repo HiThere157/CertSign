@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SettingsController;
@@ -27,9 +28,7 @@ if(!empty($app_url)){
     URL::forceScheme($schema);
 }
 
-Route::get('/', function () {
-    return view('pages.home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/login', [SessionController::class, 'login_index'])->name('login');
 Route::post('/login', [SessionController::class, 'login']);

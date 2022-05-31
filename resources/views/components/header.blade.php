@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">CertSign</a>
+        <a class="navbar-brand" href="{{ route('home') }}">CertSign</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -19,6 +19,12 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('logs') ? 'active' : '' }}" href="{{ route('logs') }}">Logs</a>
                 </li>
+
+                @if(!request()->is('/') && !request()->is('certificates') && !request()->is('certificates/deleted') && !request()->is('logs'))
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">{{ str_replace('.', ' ', request()->route()->getName()) }}</a>
+                    </li>
+                @endif
 
             </ul>
             @auth
