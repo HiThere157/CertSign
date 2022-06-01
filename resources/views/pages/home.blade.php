@@ -6,7 +6,7 @@
     </div>
 
     <div class="container-fluid d-flex flex-wrap">
-        <div class="d-flex justify-content-center align-items-center flex-column rounded shadow m-3" style="width: 15%; min-width: 20rem; aspect-ratio: 1">
+        <div class="d-flex justify-content-center align-items-center flex-column rounded shadow m-3" style="width: 13%; min-width: 15rem; aspect-ratio: 1">
             <h1>
                 {{ $expired_certificates }}
             </h1>
@@ -15,7 +15,7 @@
             </h5>
         </div>
 
-        <div class="d-flex justify-content-center align-items-center flex-column rounded shadow m-3" style="width: 15%; min-width: 20rem; aspect-ratio: 1">
+        <div class="d-flex justify-content-center align-items-center flex-column rounded shadow m-3" style="width: 13%; min-width: 15rem; aspect-ratio: 1">
             <h1>
                 {{ $all_certificates }}
             </h1>
@@ -24,7 +24,7 @@
             </h5>
         </div>
 
-        <div class="d-flex justify-content-center align-items-center flex-column rounded shadow m-3" style="width: 15%; min-width: 20rem; aspect-ratio: 1">
+        <div class="d-flex justify-content-center align-items-center flex-column rounded shadow m-3" style="width: 13%; min-width: 15rem; aspect-ratio: 1">
             <h1>
                 {{ $all_users }}
             </h1>
