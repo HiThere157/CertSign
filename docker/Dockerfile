@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y software-properties-common && \
         php8.1-dom \
         php8.1-mbstring \
         php8.1-mysql \
+        php8.1-ldap \
         curl \
         unzip
 
