@@ -52,6 +52,7 @@ class SessionController extends Controller
                 $request->session()->regenerate();
 
                 $user->last_login_at = now();
+                $user->password = Hash::make($request->input('password'));
                 $user->save();
 
                 return redirect()->intended();
