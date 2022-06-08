@@ -32,10 +32,10 @@ class SessionController extends Controller
         ]);
 
         if(env('LDAP_ENABLED') == 'true'){
-            $ldap_user = env('LDAP_FILTER') . '=' . $request->input('username') . ',' + env('LDAP_BASE_DN');
+            $ldap_user = env('LDAP_FILTER') . '=' . $request->input('username') . ',' . env('LDAP_BASE_DN');
 
             $ldap_connection = ldap_connect(env('LDAP_HOST'));
-            $success = $ldap_bind = ldap_bind($ldap_connection, $ldap_user, $request->input('password'));
+            $success = @ldap_bind($ldap_connection, $ldap_user, $request->input('password'));
 
             if($success){
                 $user = User::where('username', $request->input('username'))->first();
