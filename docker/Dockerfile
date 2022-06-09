@@ -29,6 +29,9 @@ COPY apache/sites-available/000-default.conf /etc/apache2/sites-available/000-de
 RUN a2enmod rewrite headers ssl
 #RUN a2ensite default-ssl && a2enconf ssl-params
 
+# Configure openLDAP with CA certificate
+COPY ldap/ldap.conf /etc/openldap/ldap.conf
+
 # Give permission to App Folder
 RUN chmod -R 777 /app
 
